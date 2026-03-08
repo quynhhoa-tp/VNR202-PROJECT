@@ -1771,6 +1771,67 @@ const style = `
     text-transform: uppercase;
   }
 
+  /* ─── APPENDIX / AI USAGE ────────────────────────── */
+  .sec-appendix { background: #f5f0e5; position: relative; overflow: hidden; }
+  .sec-appendix::before {
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(ellipse at 70% -20%, rgba(200,16,46,.03) 0%, transparent 55%);
+    pointer-events: none;
+  }
+
+  .appendix-content {
+    max-width: min(920px, 100%);
+    margin: 0 auto; position: relative; z-index: 1;
+  }
+
+  .appendix-intro {
+    background: #ffffff;
+    border: 1px solid rgba(200,16,46,.15);
+    border-left: 4px solid var(--red);
+    padding: clamp(24px, 3vw, 36px);
+    margin-bottom: clamp(20px, 3vw, 28px);
+    border-radius: 2px;
+  }
+
+  .appendix-intro p {
+    font-family: 'Crimson Text', serif;
+    font-size: clamp(.95rem, 1.6vw, 1.08rem);
+    line-height: 1.85; color: rgba(43,26,13,.85);
+    margin-bottom: 12px;
+  }
+
+  .appendix-intro p:last-child { margin-bottom: 0; }
+
+  .appendix-list {
+    background: #ffffff;
+    border: 1px solid rgba(200,16,46,.15);
+    border-left: 4px solid var(--red);
+    padding: clamp(24px, 3vw, 36px);
+    margin-bottom: clamp(20px, 3vw, 28px);
+    border-radius: 2px;
+  }
+
+  .appendix-list h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.15rem, 2.2vw, 1.55rem);
+    font-weight: 700; color: var(--red);
+    margin-bottom: 16px;
+  }
+
+  .appendix-list ul {
+    margin-left: clamp(16px, 2vw, 28px);
+    list-style-type: disc;
+  }
+
+  .appendix-list li {
+    font-family: 'Crimson Text', serif;
+    font-size: clamp(.95rem, 1.6vw, 1.08rem);
+    line-height: 1.85; color: rgba(43,26,13,.85);
+    margin-bottom: 10px;
+  }
+
+  .appendix-list li:last-child { margin-bottom: 0; }
+
   /* ─── FOOTER ─────────────────────────────────────── */
   footer {
     text-align: center;
@@ -4022,16 +4083,64 @@ export default function Home() {
         </div>
       </section>
 
-     
+      {/* APPENDIX: AI USAGE */}
+      <section className="sec sec-appendix">
+        <div className="sec-label">PHỤ LỤC</div>
+        <h2 className="sec-title">Sử dụng Trợ lý AI</h2>
+        
+        <div className="appendix-content">
+          <div className="appendix-intro">
+            <p>
+              Bản báo cáo này được thực hiện với sự hỗ trợ của các công cụ trí 
+              tuệ nhân tạo (AI), bao gồm GitHub Copilot, để giúp trong việc 
+              tổ chức thông tin, soát xét nội dung và cải thiện chất lượng 
+              trình bày.
+            </p>
+          </div>
+
+          <div className="appendix-list">
+            <h4>Công cụ AI sử dụng:</h4>
+            <ul>
+              <li><strong>GitHub Copilot:</strong> Hỗ trợ trong việc viết code, tối ưu hóa cấu trúc HTML/CSS, và xử lý dữ liệu</li>
+              <li><strong>Claude (Anthropic):</strong> Giúp soát xét thông tin lịch sử, cải thiện cách diễn đạt, và đề nghị cấu trúc logic hợp lý</li>
+              <li><strong>Google Gemini:</strong> Sử dụng trong phần game của nhóm để tạo và xử lý ảnh</li>
+            </ul>
+          </div>
+
+          <div className="appendix-list">
+            <h4>Những công việc được hỗ trợ:</h4>
+            <ul>
+              <li>Tổ chức và sắp xếp thông tin lịch sử</li>
+              <li>Viết và cải thiện ngữ pháp tiếng Việt</li>
+              <li>Thiết kế giao diện người dùng và bố cục trang web</li>
+              <li>Tạo biểu đồ, bảng thống kê và so sánh dữ liệu</li>
+              <li>Soát xét nội dung và kiểm chứng thông tin</li>
+            </ul>
+          </div>
+
+          <div className="appendix-list">
+            <h4>Hạn chế và trách nhiệm con người:</h4>
+            <ul>
+              <li>Tất cả thông tin lịch sử được xác minh bởi nhóm thực hiện từ các nguồn đáng tin cậy</li>
+              <li>AI được sử dụng như một công cụ hỗ trợ, không phải để thay thế bản chất của công việc nghiên cứu</li>
+              <li>Các quyết định chủ yếu về nội dung, cấu trúc và thông điệp vẫn do nhóm thực hiện quyết định</li>
+              <li>Mọi ý kiến, kết luận và phân tích đều phản ánh quan điểm của nhóm</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
 
      
 
       {/* FOOTER */}
       <footer>
-        <strong>Chiến dịch Điện Biên Phủ 1954</strong> &nbsp;•&nbsp; VNR202
-        Project &nbsp;•&nbsp; Lịch sử Việt Nam
-        <br />7 tháng 5, 1954 – Ngày Chiến thắng &nbsp;•&nbsp;{" "}
+        <strong>Chiến dịch Điện Biên Phủ 1954</strong> 
+         &nbsp;•&nbsp;{" "}
         <em>"Lừng lẫy năm châu, chấn động địa cầu"</em>
+        <br />
+
+        <strong>Nhóm thực hiện:</strong> Trương Phạm Quỳnh Hoa (SE171754) &nbsp;•&nbsp; Trần Khánh Linh (SE180151) &nbsp;•&nbsp; Huỳnh Huy Hoàng (SE182051) &nbsp;•&nbsp; Đỗ Quốc Anh (	SE180161) &nbsp;•&nbsp; Vũ Hoàng Minh (SE182677) &nbsp;•&nbsp; 	Đỗ	Hoàng Bảo	Trân (SE182181)
       </footer>
 
       {/* Scroll to top */}
