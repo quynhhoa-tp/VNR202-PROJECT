@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 
+
 const style = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
 
@@ -9,22 +10,23 @@ const style = `
 
   :root {
     --red: #c8102e;
-    --gold: #f5c842;
-    --dark: #0d0a06;
-    --brown-deep: #1a0e07;
-    --brown: #2b1a0d;
-    --brown-mid: #3d2510;
-    --cream: #f5e9cc;
+    --gold: #d4a017;
+    --dark: #fffdf5;
+    --brown-deep: #fef8e8;
+    --brown: #faf5eb;
+    --brown-mid: #f5f0e5;
+    --cream: #2b1a0d;
     --nav-h: 64px;
   }
 
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--dark);
+    background: linear-gradient(135deg, #fffdf5 0%, #fef8e8 100%);
     overflow-x: hidden;
     font-family: 'Crimson Text', serif;
     -webkit-font-smoothing: antialiased;
+    color: #2b1a0d;
   }
 
   body::after {
@@ -32,7 +34,7 @@ const style = `
     position: fixed; inset: 0; z-index: 9999;
     pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-    opacity: 0.35;
+    opacity: 0.15;
   }
 
   /* ─── NAVBAR ─────────────────────────────────────── */
@@ -42,12 +44,13 @@ const style = `
     display: flex; align-items: center;
     justify-content: space-between;
     padding: 0 clamp(16px, 4vw, 48px);
-    background: rgba(13,10,6,0.92);
-    border-bottom: 1px solid rgba(245,200,66,0.18);
+    background: rgba(254,248,232,0.95);
+    border-bottom: 1px solid rgba(200,16,46,0.2);
     backdrop-filter: blur(14px);
     transition: background 0.3s;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
-  .nav.opaque { background: rgba(13,10,6,0.99); }
+  .nav.opaque { background: rgba(254,248,232,0.98); }
 
   .nav-brand {
     display: flex; align-items: center; gap: 10px;
@@ -64,29 +67,35 @@ const style = `
   .nav-title {
     font-family: 'Playfair Display', serif;
     font-size: clamp(0.85rem, 2vw, 1.2rem);
-    font-weight: 900; color: var(--gold);
+    font-weight: 900; color: var(--red);
     letter-spacing: 0.03em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    text-shadow: 0 0 20px rgba(245,200,66,0.3);
+    text-shadow: 0 0 20px rgba(200,16,46,0.15);
   }
 
   .nav-links {
-    display: flex; gap: clamp(12px, 2vw, 28px);
-    flex-shrink: 0; flex-wrap: nowrap;
+    display: flex; gap: clamp(6px, 1.5vw, 18px);
+    flex-shrink: 1; flex-wrap: wrap;
   }
   .nav-links a {
     font-family: 'Crimson Text', serif;
-    font-size: clamp(0.65rem, 1.1vw, 0.82rem);
-    color: rgba(245,233,204,0.6);
-    text-decoration: none; letter-spacing: 0.08em;
+    font-size: clamp(0.55rem, 0.9vw, 0.72rem);
+    color: rgba(101,65,35,0.7);
+    text-decoration: none; letter-spacing: 0.06em;
     text-transform: uppercase; transition: color 0.25s;
     white-space: nowrap;
+    padding: 4px 0;
   }
-  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover { color: var(--red); }
 
-  @media (max-width: 700px) {
+  @media (max-width: 900px) {
+    .nav-links { gap: clamp(4px, 1vw, 12px); }
+    .nav-links a { font-size: clamp(0.5rem, 0.8vw, 0.65rem); }
+  }
+
+  @media (max-width: 600px) {
     .nav-links { display: none; }
-    .nav-title { font-size: 0.9rem; }
+    .nav-title { font-size: 0.75rem; }
   }
 
   /* ─── HERO ───────────────────────────────────────── */
@@ -101,23 +110,24 @@ const style = `
   .hero-sky {
     position: absolute; inset: 0;
     background: linear-gradient(to bottom,
-      #1a1015 0%, #2d1810 15%, #4a2515 35%,
-      #5d3018 55%, #7a4020 72%, #563015 85%, #2a1510 100%
+      #ffb84d 0%, #ff9933 8%, #ff8033 18%,
+      #ff6b33 32%, #ff5233 48%, #ff4833 65%, 
+      #ff3d33 78%, #ff3333 90%, #ff6b4d 100%
     );
   }
 
   .hero-stars {
     position: absolute; inset: 0; pointer-events: none;
     background-image:
-      radial-gradient(1px 1px at 8% 10%, rgba(255,255,255,.75) 0%, transparent 100%),
-      radial-gradient(1px 1px at 22% 6%, rgba(255,255,255,.5) 0%, transparent 100%),
-      radial-gradient(1.5px 1.5px at 40% 16%, rgba(255,255,255,.85) 0%, transparent 100%),
-      radial-gradient(1px 1px at 57% 9%, rgba(255,255,255,.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at 74% 4%, rgba(255,255,255,.7) 0%, transparent 100%),
-      radial-gradient(1px 1px at 89% 13%, rgba(255,255,255,.5) 0%, transparent 100%),
-      radial-gradient(2px 2px at 33% 3%, rgba(255,240,180,.9) 0%, transparent 100%),
-      radial-gradient(1px 1px at 62% 20%, rgba(255,255,255,.4) 0%, transparent 100%),
-      radial-gradient(1px 1px at 15% 28%, rgba(255,255,255,.35) 0%, transparent 100%);
+      radial-gradient(1px 1px at 8% 10%, rgba(255,255,255,.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 22% 6%, rgba(255,255,255,.15) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 40% 16%, rgba(255,255,255,.25) 0%, transparent 100%),
+      radial-gradient(1px 1px at 57% 9%, rgba(255,255,255,.18) 0%, transparent 100%),
+      radial-gradient(1px 1px at 74% 4%, rgba(255,255,255,.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 89% 13%, rgba(255,255,255,.15) 0%, transparent 100%),
+      radial-gradient(2px 2px at 33% 3%, rgba(255,240,180,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 62% 20%, rgba(255,255,255,.1) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 28%, rgba(255,255,255,.1) 0%, transparent 100%);
   }
 
   .hero-smoke {
@@ -125,9 +135,9 @@ const style = `
     filter: blur(50px); pointer-events: none;
     animation: smokeDrift 10s ease-in-out infinite;
   }
-  .hs1{width:min(320px,40vw);height:min(200px,25vw);top:6%;left:4%;background:rgba(220,100,30,.18);animation-delay:0s}
-  .hs2{width:min(200px,28vw);height:min(140px,18vw);top:18%;left:60%;background:rgba(240,120,40,.15);animation-delay:3s}
-  .hs3{width:min(250px,35vw);height:min(155px,20vw);top:8%;left:76%;background:rgba(180,80,20,.12);animation-delay:6s}
+  .hs1{width:min(320px,40vw);height:min(200px,25vw);top:6%;left:4%;background:rgba(255,255,255,.08);animation-delay:0s}
+  .hs2{width:min(200px,28vw);height:min(140px,18vw);top:18%;left:60%;background:rgba(255,255,200,.06);animation-delay:3s}
+  .hs3{width:min(250px,35vw);height:min(155px,20vw);top:8%;left:76%;background:rgba(255,240,200,.05);animation-delay:6s}
 
   @keyframes smokeDrift {
     0%,100%{transform:translateX(0) scale(1);opacity:.6}
@@ -160,36 +170,36 @@ const style = `
     display: flex; align-items: center; gap: 10px;
     font-family: 'Crimson Text', serif;
     font-size: clamp(0.72rem, 1.5vw, 0.88rem);
-    letter-spacing: 0.28em; color: var(--red);
+    letter-spacing: 0.28em; color: #ffffff;
     text-transform: uppercase; margin-bottom: 12px;
   }
   .hero-eyebrow::before {
     content: ''; display: block;
-    width: clamp(20px, 3vw, 36px); height: 1px; background: var(--red); flex-shrink: 0;
+    width: clamp(20px, 3vw, 36px); height: 1px; background: #ffffff; flex-shrink: 0;
   }
 
   .hero-title {
     font-family: 'Playfair Display', serif;
     font-size: clamp(2.4rem, 7vw, 5.5rem);
     font-weight: 900; line-height: 1.04;
-    color: var(--cream);
-    text-shadow: 0 4px 40px rgba(0,0,0,.9);
+    color: #ffffff;
+    text-shadow: 0 4px 40px rgba(0,0,0,.3);
     margin-bottom: 10px;
   }
-  .hero-title span { color: var(--gold); display: block; }
+  .hero-title span { color: #ffe680; display: block; }
 
   .hero-subtitle {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1rem, 2.2vw, 1.4rem);
-    font-style: italic; color: var(--gold);
+    font-style: italic; color: #ffe680;
     margin-bottom: clamp(12px, 2vw, 20px);
-    text-shadow: 0 0 18px rgba(245,200,66,.4);
+    text-shadow: 0 0 18px rgba(255,230,128,.3);
   }
 
   .hero-desc {
     font-family: 'Crimson Text', serif;
     font-size: clamp(0.95rem, 1.8vw, 1.12rem);
-    line-height: 1.8; color: rgba(245,233,204,.82);
+    line-height: 1.8; color: rgba(255,255,255,.95);
     max-width: min(540px, 100%);
   }
 
@@ -198,18 +208,18 @@ const style = `
     font-family: 'Crimson Text', serif;
     font-size: clamp(0.68rem, 1.2vw, 0.82rem);
     letter-spacing: .14em; text-transform: uppercase;
-    color: rgba(245,233,204,.42); margin-bottom: 4px;
+    color: rgba(255,255,255,.7); margin-bottom: 4px;
   }
   .hero-stat-num {
     font-family: 'Playfair Display', serif;
     font-size: clamp(3.5rem, 8vw, 5.5rem);
-    font-weight: 900; color: var(--gold); line-height: 1;
-    text-shadow: 0 0 36px rgba(245,200,66,.5);
+    font-weight: 900; color: #ffe680; line-height: 1;
+    text-shadow: 0 0 36px rgba(255,230,128,.4);
   }
   .hero-stat-sub {
     font-family: 'Crimson Text', serif;
     font-size: clamp(0.68rem, 1.2vw, 0.82rem);
-    color: rgba(245,233,204,.42); letter-spacing: .07em;
+    color: rgba(255,255,255,.6); letter-spacing: .07em;
   }
 
   /* ─── SHARED SECTION STYLES ──────────────────────── */
@@ -225,9 +235,9 @@ const style = `
   .sec-title {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.6rem, 4vw, 2.9rem);
-    font-weight: 900; text-align: center; color: var(--gold);
+    font-weight: 900; text-align: center; color: var(--red);
     margin-bottom: clamp(32px, 5vw, 60px);
-    text-shadow: 0 0 30px rgba(245,200,66,.22);
+    text-shadow: 0 0 30px rgba(200,16,46,.08);
   }
   .sec-inner {
     max-width: min(1100px, 100%);
@@ -235,10 +245,10 @@ const style = `
   }
 
   /* ─── A1 SECTION ─────────────────────────────────── */
-  .sec-a1 { background: var(--brown-deep); position: relative; overflow: hidden; }
+  .sec-a1 { background: #faf5eb; position: relative; overflow: hidden; }
   .sec-a1::before {
     content:''; position:absolute; inset:0;
-    background: radial-gradient(ellipse at 50% 110%, rgba(139,58,16,.12) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 50% 110%, rgba(200,16,46,.04) 0%, transparent 60%);
     pointer-events: none;
   }
 
@@ -251,12 +261,12 @@ const style = `
 
   .a1-img-wrap {
     position: relative;
-    border: 2px solid rgba(245,200,66,.22); border-radius: 3px;
+    border: 2px solid rgba(200,16,46,.3); border-radius: 3px;
     overflow: hidden; aspect-ratio: 4/3;
   }
   .a1-img-wrap::after {
     content:''; position:absolute; inset:0;
-    background: linear-gradient(to top, rgba(13,10,6,.62) 0%, transparent 52%);
+    background: linear-gradient(to top, rgba(255,255,255,.3) 0%, transparent 52%);
   }
   .a1-img-wrap img {
     width: 100%; height: 100%; object-fit: cover; display: block;
@@ -267,21 +277,21 @@ const style = `
   .a1-img-cap {
     position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
     padding: clamp(12px,2vw,18px) clamp(14px,2.5vw,22px);
-    font-family: 'Crimson Text', serif; color: var(--cream);
+    font-family: 'Crimson Text', serif; color: #ffffff;
     font-style: italic; font-size: clamp(.82rem,1.5vw,.96rem);
   }
 
   .a1-info h3 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.4rem, 3vw, 2rem);
-    font-weight: 900; color: var(--gold); margin-bottom: 16px;
+    font-weight: 900; color: var(--red); margin-bottom: 16px;
   }
   .a1-info p {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.95rem, 1.7vw, 1.1rem);
-    line-height: 1.85; color: rgba(245,233,204,.82); margin-bottom: 16px;
+    line-height: 1.85; color: rgba(43,26,13,.85); margin-bottom: 16px;
   }
-  .a1-info strong { color: var(--gold); }
+  .a1-info strong { color: var(--red); }
 
   .stats {
     display: flex; flex-wrap: wrap;
@@ -290,78 +300,119 @@ const style = `
   .stat {
     flex: 1 1 80px; text-align: center;
     padding: clamp(10px,1.5vw,14px) clamp(12px,2vw,20px);
-    border: 1px solid rgba(245,200,66,.2);
-    background: rgba(245,200,66,.04);
+    border: 1px solid rgba(200,16,46,.25);
+    background: rgba(200,16,46,.04);
   }
   .stat-n {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.4rem, 3vw, 1.9rem);
-    font-weight: 900; color: var(--gold); display: block;
+    font-weight: 900; color: var(--red); display: block;
   }
   .stat-l {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.7rem, 1.3vw, .8rem);
-    color: rgba(245,233,204,.5); letter-spacing: .03em;
+    color: rgba(43,26,13,.6); letter-spacing: .03em;
   }
 
   /* ─── GALLERY ────────────────────────────────────── */
-  .sec-gallery { background: var(--brown); }
+  .sec-gallery { background: #f5f0e5; }
 
   .gallery {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-auto-rows: clamp(160px, 20vw, 260px);
+    display: flex;
+    overflow-x: auto;
     gap: clamp(6px, 1vw, 12px);
+    padding: clamp(8px, 1vw, 16px) 0;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
   }
 
-  .g0 { grid-column: span 5; grid-row: span 2; }
-  .g1 { grid-column: span 4; }
-  .g2 { grid-column: span 3; }
-  .g3 { grid-column: span 4; }
-  .g4 { grid-column: span 3; }
+  .gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  .g0, .g1, .g2, .g3, .g4, .g5, .g6, .g7, .g8 {
+    flex: 0 0 clamp(280px, 30vw, 360px);
+    display: flex;
+    flex-direction: column;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
 
   @media (max-width: 900px) {
-    .g0 { grid-column: span 6; grid-row: span 2; }
-    .g1 { grid-column: span 6; }
-    .g2 { grid-column: span 6; }
-    .g3 { grid-column: span 6; }
-    .g4 { grid-column: span 6; }
+    .g0, .g1, .g2, .g3, .g4, .g5, .g6, .g7, .g8 {
+      flex: 0 0 clamp(240px, 25vw, 320px);
+    }
   }
 
   @media (max-width: 560px) {
-    .gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 44vw; }
-    .g0 { grid-column: span 2; grid-row: span 1; }
-    .g1,.g2,.g3,.g4 { grid-column: span 1; }
+    .g0, .g1, .g2, .g3, .g4, .g5, .g6, .g7, .g8 {
+      flex: 0 0 clamp(200px, 60vw, 280px);
+    }
+  }
+
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: clamp(20px, 3vw, 28px);
+  }
+
+  .gallery-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(200,16,46,.25);
+    cursor: pointer;
+    transition: all .3s;
+    border: 2px solid transparent;
+  }
+
+  .gallery-dot.active {
+    background: var(--red);
+    width: 14px;
+    height: 14px;
+    box-shadow: 0 0 12px rgba(200,16,46,.4);
+  }
+
+  .gallery-dot:hover {
+    background: var(--red);
   }
 
   .g-item {
-    position: relative; overflow: hidden;
-    border: 1px solid rgba(245,200,66,.1);
+    position: relative;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
   }
   .g-item img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
+    width: 100%; 
+    aspect-ratio: 4/3;
+    object-fit: cover; 
+    display: block;
+    flex: 0 0 auto;
     filter: sepia(22%) brightness(.82);
     transition: transform .55s ease, filter .38s ease;
   }
   .g-item:hover img { transform: scale(1.06); filter: sepia(4%) brightness(1); }
   .g-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(13,10,6,.88) 0%, transparent 52%);
-    opacity: 0; transition: opacity .35s;
+    display: none;
   }
-  .g-item:hover .g-overlay { opacity: 1; }
   .g-cap {
-    position: absolute; bottom: 0; left: 0; right: 0;
+    flex: 0 0 auto;
     padding: clamp(10px,1.5vw,16px) clamp(12px,2vw,18px);
-    font-family: 'Crimson Text', serif; color: var(--cream);
-    font-size: clamp(.8rem,1.4vw,.98rem); font-style: italic;
-    transform: translateY(8px); opacity: 0;
-    transition: transform .35s, opacity .35s;
+    font-family: 'Crimson Text', serif; 
+    color: #ffffff;
+    font-size: clamp(.8rem,1.4vw,.98rem); 
+    font-style: italic;
+    background: rgba(0,0,0,0.65);
+    border: 1px solid rgba(200,16,46,.2);
+    border-top: none;
   }
-  .g-item:hover .g-cap { transform: translateY(0); opacity: 1; }
 
   /* ─── TIMELINE ───────────────────────────────────── */
-  .sec-timeline { background: var(--brown-deep); }
+  .sec-timeline { background: #faf5eb; }
 
   .timeline {
     max-width: min(820px, 100%);
@@ -370,7 +421,7 @@ const style = `
   .timeline::before {
     content: ''; position: absolute;
     left: clamp(20px, 4vw, 32px); top: 0; bottom: 0; width: 1px;
-    background: linear-gradient(to bottom, transparent, rgba(245,200,66,.35) 8%, rgba(245,200,66,.35) 92%, transparent);
+    background: linear-gradient(to bottom, transparent, rgba(200,16,46,.35) 8%, rgba(200,16,46,.35) 92%, transparent);
   }
 
   .tl-item {
@@ -398,40 +449,40 @@ const style = `
   }
   .tl-dot-inner {
     width: 11px; height: 11px; border-radius: 50%;
-    background: var(--gold); border: 2px solid var(--dark);
-    box-shadow: 0 0 10px rgba(245,200,66,.55); z-index: 1;
+    background: var(--red); border: 2px solid #fffdf5;
+    box-shadow: 0 0 10px rgba(200,16,46,.4); z-index: 1;
   }
 
   .tl-body {
     flex: 1; min-width: 0;
-    background: rgba(61,37,16,.38);
-    border: 1px solid rgba(245,200,66,.12);
+    background: #ffffff;
+    border: 1px solid rgba(200,16,46,.15);
     border-left: 3px solid var(--red);
     padding: clamp(14px,2vw,20px) clamp(16px,2.5vw,24px);
-    transition: background .3s, border-color .3s;
+    transition: background .3s, border-color .3s, transform .3s;
   }
-  .tl-body:hover { background: rgba(61,37,16,.65); border-color: rgba(245,200,66,.32); }
+  .tl-body:hover { background: #fffdf5; border-color: rgba(200,16,46,.3); transform: translateX(4px); }
 
   .tl-date {
     font-family: 'Playfair Display', serif;
     font-size: clamp(.95rem, 1.8vw, 1.15rem);
-    font-weight: 700; color: var(--gold); margin-bottom: 7px;
+    font-weight: 700; color: var(--red); margin-bottom: 7px;
   }
   .tl-text {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.9rem, 1.6vw, 1.05rem);
-    line-height: 1.75; color: rgba(245,233,204,.82);
+    line-height: 1.75; color: rgba(43,26,13,.85);
   }
 
   /* ─── SIGNIFICANCE ───────────────────────────────── */
   .sec-sig {
-    background: linear-gradient(135deg, var(--brown-mid) 0%, var(--brown-deep) 100%);
+    background: linear-gradient(135deg, #f5f0e5 0%, #faf5eb 100%);
     position: relative; overflow: hidden;
   }
   .sec-sig::before {
     content: '★'; position: absolute;
     font-size: clamp(30vw, 42vw, 55vw);
-    color: rgba(245,200,66,.015);
+    color: rgba(200,16,46,.015);
     top: 50%; left: 50%; transform: translate(-50%,-50%);
     font-family: serif; line-height: 1; pointer-events: none;
   }
@@ -444,20 +495,20 @@ const style = `
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.15rem, 3vw, 1.9rem);
     font-style: italic; font-weight: 700;
-    color: var(--cream); line-height: 1.65; margin-bottom: 24px;
+    color: rgba(43,26,13,.9); line-height: 1.65; margin-bottom: 24px;
   }
-  .sig-quote em { color: var(--gold); font-style: normal; }
+  .sig-quote em { color: var(--red); font-style: normal; }
   .sig-body {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.95rem, 1.8vw, 1.12rem);
-    line-height: 1.9; color: rgba(245,233,204,.78);
+    line-height: 1.9; color: rgba(43,26,13,.82);
   }
 
   /* ─── THEORY SECTION ────────────────────────────── */
-  .sec-theory { background: var(--brown-mid); position: relative; }
+  .sec-theory { background: #f5f0e5; position: relative; }
   .sec-theory::after {
     content:''; position:absolute; inset:0;
-    background: radial-gradient(ellipse at 30% -20%, rgba(200,16,46,.08) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 30% -20%, rgba(200,16,46,.04) 0%, transparent 60%);
     pointer-events: none;
   }
 
@@ -469,42 +520,45 @@ const style = `
   }
 
   .theory-card {
-    background: rgba(61,37,16,.35);
-    border: 1px solid rgba(245,200,66,.15);
+    background: #ffffff;
+    border: 1px solid rgba(200,16,46,.15);
+    border-top: 3px solid var(--red);
     padding: clamp(20px, 2.5vw, 28px);
     border-radius: 2px;
     transition: all .3s;
   }
   .theory-card:hover {
-    background: rgba(61,37,16,.55);
-    border-color: rgba(245,200,66,.32);
-    transform: translateY(-2px);
+    background: #fffdf5;
+    border-color: rgba(200,16,46,.3);
+    border-top: 3px solid var(--red);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   }
 
   .theory-card h4 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.1rem, 2vw, 1.4rem);
-    font-weight: 700; color: var(--gold);
+    font-weight: 700; color: var(--red);
     margin-bottom: 12px;
   }
 
   .theory-card p {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.9rem, 1.5vw, 1rem);
-    line-height: 1.75; color: rgba(245,233,204,.78);
+    line-height: 1.75; color: rgba(43,26,13,.8);
   }
 
   /* ─── CONTEXT / PREPARATION SECTIONS ──────────────── */
-  .sec-context { background: var(--brown-mid); position: relative; }
+  .sec-context { background: #faf5eb; position: relative; }
   .sec-context::after {
     content:''; position:absolute; inset:0;
-    background: radial-gradient(ellipse at 30% -20%, rgba(200,16,46,.08) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 30% -20%, rgba(200,16,46,.04) 0%, transparent 60%);
     pointer-events: none;
   }
-  .sec-preparation { background: var(--brown-deep); position: relative; overflow: hidden; }
+  .sec-preparation { background: #f5f0e5; position: relative; overflow: hidden; }
   .sec-preparation::before {
     content:''; position:absolute; inset:0;
-    background: radial-gradient(ellipse at 70% 110%, rgba(245,200,66,.06) 0%, transparent 55%);
+    background: radial-gradient(ellipse at 70% 110%, rgba(200,16,46,.03) 0%, transparent 55%);
     pointer-events: none;
   }
 
@@ -513,8 +567,8 @@ const style = `
     margin: 0 auto; position: relative; z-index: 1;
   }
   .context-block {
-    background: rgba(61,37,16,.35);
-    border: 1px solid rgba(245,200,66,.15);
+    background: #ffffff;
+    border: 1px solid rgba(200,16,46,.15);
     border-left: 4px solid var(--red);
     padding: clamp(24px, 3vw, 36px);
     margin-bottom: clamp(20px, 3vw, 28px);
@@ -523,23 +577,23 @@ const style = `
   .context-block h3 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.15rem, 2.2vw, 1.55rem);
-    font-weight: 700; color: var(--gold);
+    font-weight: 700; color: var(--red);
     margin-bottom: 14px;
   }
   .context-block p {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.95rem, 1.6vw, 1.08rem);
-    line-height: 1.85; color: rgba(245,233,204,.82);
+    line-height: 1.85; color: rgba(43,26,13,.85);
     margin-bottom: 12px;
   }
   .context-block p:last-child { margin-bottom: 0; }
-  .context-block strong { color: var(--gold); }
-  .context-block em { color: #e8a0a0; font-style: italic; }
+  .context-block strong { color: var(--red); }
+  .context-block em { color: #c87080; font-style: italic; }
 
   .quote-block {
     background: rgba(200,16,46,.06);
-    border: 1px solid rgba(200,16,46,.22);
-    border-left: 4px solid var(--gold);
+    border: 1px solid rgba(200,16,46,.2);
+    border-left: 4px solid var(--red);
     padding: clamp(24px, 3vw, 40px);
     margin-bottom: clamp(20px, 3vw, 28px);
     border-radius: 2px;
@@ -548,19 +602,19 @@ const style = `
   .quote-block::before {
     content: '\\201C'; position: absolute; top: 10px; left: 18px;
     font-family: 'Playfair Display', serif;
-    font-size: 3.5rem; color: rgba(245,200,66,.12); line-height: 1;
+    font-size: 3.5rem; color: rgba(200,16,46,.1); line-height: 1;
   }
   .quote-block p {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1rem, 1.8vw, 1.18rem);
     font-style: italic; font-weight: 700;
-    color: var(--cream); line-height: 1.7;
+    color: rgba(43,26,13,.9); line-height: 1.7;
     padding-left: 24px;
   }
   .quote-block .quote-attr {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.82rem, 1.3vw, .92rem);
-    color: rgba(245,233,204,.42);
+    color: rgba(43,26,13,.6);
     font-style: normal; letter-spacing: .06em;
     padding-left: 24px; margin-top: 12px;
   }
@@ -568,25 +622,25 @@ const style = `
   .context-stats-row {
     display: flex; flex-wrap: wrap;
     gap: 1px; margin: clamp(20px,3vw,28px) 0;
-    border: 1px solid rgba(245,200,66,.15);
+    border: 1px solid rgba(200,16,46,.15);
     border-radius: 2px; overflow: hidden;
   }
   .context-stat-item {
     flex: 1 1 140px;
     text-align: center;
     padding: clamp(14px, 2vw, 22px) clamp(10px, 1.5vw, 16px);
-    background: rgba(61,37,16,.5);
+    background: rgba(200,16,46,.05);
   }
   .context-stat-item .cs-n {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.2rem, 2.5vw, 1.65rem);
-    font-weight: 900; color: var(--gold); display: block;
+    font-weight: 900; color: var(--red); display: block;
     margin-bottom: 4px;
   }
   .context-stat-item .cs-l {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.72rem, 1.2vw, .82rem);
-    color: rgba(245,233,204,.5);
+    color: rgba(43,26,13,.6);
   }
 
   .prep-directions {
@@ -597,28 +651,28 @@ const style = `
     position: relative; z-index: 1;
   }
   .prep-dir-card {
-    background: rgba(61,37,16,.4);
-    border: 1px solid rgba(245,200,66,.12);
+    background: #ffffff;
+    border: 1px solid rgba(200,16,46,.15);
     border-top: 2px solid var(--red);
     padding: clamp(14px, 2vw, 20px);
     border-radius: 2px;
     transition: all .3s;
   }
   .prep-dir-card:hover {
-    background: rgba(61,37,16,.6);
-    border-color: rgba(245,200,66,.28);
+    background: #fffdf5;
+    border-color: rgba(200,16,46,.28);
     transform: translateY(-2px);
   }
   .prep-dir-card h4 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(.92rem, 1.5vw, 1.1rem);
-    font-weight: 700; color: var(--gold);
+    font-weight: 700; color: var(--red);
     margin-bottom: 6px;
   }
   .prep-dir-card p {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.85rem, 1.4vw, .96rem);
-    line-height: 1.7; color: rgba(245,233,204,.72);
+    line-height: 1.7; color: rgba(43,26,13,.8);
   }
 
   /* ─── GENEVA SECTION ────────────────────────────────── */
@@ -663,13 +717,13 @@ const style = `
   .geneva-card .gc-name {
     font-family: 'Playfair Display', serif;
     font-size: clamp(.9rem, 1.5vw, 1.05rem);
-    font-weight: 700; color: var(--cream);
+    font-weight: 700; color: rgba(43,26,13,.9);
     margin-bottom: 4px;
   }
   .geneva-card .gc-role {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.8rem, 1.3vw, .9rem);
-    color: var(--gold); font-style: italic;
+    color: var(--red); font-style: italic;
   }
   .geneva-stats {
     display: flex; flex-wrap: wrap; gap: clamp(12px, 2vw, 20px);
@@ -679,29 +733,29 @@ const style = `
   .geneva-stat {
     text-align: center;
     padding: clamp(12px, 2vw, 18px) clamp(16px, 2.5vw, 24px);
-    border: 1px solid rgba(245,200,66,.15);
-    background: rgba(245,200,66,.04);
+    border: 1px solid rgba(200,16,46,.15);
+    background: rgba(200,16,46,.04);
     border-radius: 2px; min-width: 110px;
   }
   .geneva-stat .gs-n {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.3rem, 2.5vw, 1.7rem);
-    font-weight: 900; color: var(--gold); display: block;
+    font-weight: 900; color: var(--red); display: block;
   }
   .geneva-stat .gs-l {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.72rem, 1.2vw, .82rem);
-    color: rgba(245,233,204,.5);
+    color: rgba(43,26,13,.6);
   }
 
   /* ─── LESSONS SECTION ───────────────────────────────── */
   .sec-lessons {
-    background: linear-gradient(180deg, var(--brown-mid) 0%, var(--brown-deep) 100%);
+    background: linear-gradient(180deg, #f5f0e5 0%, #faf5eb 100%);
     position: relative;
   }
   .sec-lessons::before {
     content:''; position:absolute; inset:0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(200,16,46,.06) 0%, transparent 50%);
+    background: radial-gradient(ellipse at 50% 0%, rgba(200,16,46,.04) 0%, transparent 50%);
     pointer-events: none;
   }
   .lessons-grid {
@@ -711,53 +765,56 @@ const style = `
     position: relative; z-index: 1;
   }
   .lesson-card {
-    background: rgba(61,37,16,.4);
-    border: 1px solid rgba(245,200,66,.15);
+    background: #ffffff;
+    border: 1px solid rgba(200,16,46,.15);
+    border-top: 2px solid var(--red);
     padding: clamp(24px, 3vw, 32px);
     border-radius: 2px;
     transition: all .35s;
     position: relative; overflow: hidden;
   }
   .lesson-card:hover {
-    background: rgba(61,37,16,.6);
-    border-color: rgba(245,200,66,.3);
+    background: #fffdf5;
+    border-color: rgba(200,16,46,.3);
+    border-top: 2px solid var(--red);
     transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   }
   .lesson-card .lc-num {
     font-family: 'Playfair Display', serif;
     font-size: clamp(2.5rem, 5vw, 3.5rem);
-    font-weight: 900; color: rgba(245,200,66,.08);
+    font-weight: 900; color: rgba(200,16,46,.08);
     position: absolute; top: 8px; right: 16px; line-height: 1;
   }
   .lesson-card h4 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.05rem, 1.8vw, 1.25rem);
-    font-weight: 700; color: var(--gold);
+    font-weight: 700; color: var(--red);
     margin-bottom: 12px; position: relative;
   }
   .lesson-card p {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.9rem, 1.5vw, 1.02rem);
-    line-height: 1.8; color: rgba(245,233,204,.75);
+    line-height: 1.8; color: rgba(43,26,13,.8);
     position: relative;
   }
   .motto-banner {
     text-align: center;
     padding: clamp(20px, 3vw, 32px);
     margin-top: clamp(12px, 2vw, 20px);
-    border: 1px solid rgba(245,200,66,.2);
+    border: 1px solid rgba(200,16,46,.2);
     background: rgba(200,16,46,.06);
     border-radius: 2px;
   }
   .motto-banner p {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.1rem, 2vw, 1.4rem);
-    font-weight: 900; color: var(--gold);
+    font-weight: 900; color: var(--red);
     letter-spacing: .04em;
   }
 
   /* ─── MAP SECTION ────────────────────────────────── */
-  .sec-map { background: var(--brown); position: relative; overflow: hidden; }
+  .sec-map { background: #f5f0e5; position: relative; overflow: hidden; }
 
   .map-container {
     max-width: min(900px, 100%);
@@ -773,8 +830,8 @@ const style = `
   }
 
   .map-visual {
-    background: rgba(61,37,16,.4);
-    border: 2px solid rgba(245,200,66,.22);
+    background: #ffffff;
+    border: 2px solid rgba(200,16,46,.2);
     border-radius: 3px;
     aspect-ratio: 4/3;
     overflow: hidden;
@@ -788,9 +845,9 @@ const style = `
 
   .map-tab-btn {
     padding: 12px 24px;
-    background: rgba(200,16,46,.2);
-    border: 2px solid rgba(200,16,46,.4);
-    color: var(--gold);
+    background: rgba(200,16,46,.1);
+    border: 2px solid rgba(200,16,46,.3);
+    color: var(--red);
     font-family: 'Crimson Text', serif;
     font-size: 15px;
     cursor: pointer;
@@ -799,12 +856,13 @@ const style = `
   }
 
   .map-tab-btn.active {
-    background: rgba(200,16,46,.7);
-    border-color: var(--gold);
-    box-shadow: 0 0 15px rgba(200,16,46,.5);
+    background: rgba(200,16,46,.5);
+    border-color: var(--red);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(200,16,46,.3);
   }
 
-  .map-tab-btn:hover { background: rgba(200,16,46,.5); }
+  .map-tab-btn:hover { background: rgba(200,16,46,.3); color: var(--red); }
 
   .map-phase-buttons {
     display: flex; flex-wrap: wrap; gap: 12px;
@@ -813,9 +871,9 @@ const style = `
 
   .map-phase-btn {
     padding: 10px 16px;
-    background: rgba(200,16,46,.2);
-    border: 2px solid rgba(200,16,46,.4);
-    color: var(--gold);
+    background: rgba(200,16,46,.1);
+    border: 2px solid rgba(200,16,46,.3);
+    color: var(--red);
     font-family: 'Crimson Text', serif;
     font-size: 14px;
     cursor: pointer;
@@ -824,11 +882,12 @@ const style = `
   }
 
   .map-phase-btn.active {
-    background: rgba(200,16,46,.7);
-    border-color: var(--gold);
+    background: rgba(200,16,46,.5);
+    border-color: var(--red);
+    color: #ffffff;
   }
 
-  .map-phase-btn:hover { background: rgba(200,16,46,.5); }
+  .map-phase-btn:hover { background: rgba(200,16,46,.3); }
 
   .map-legend {
     display: flex; flex-direction: column; gap: 12px;
@@ -840,20 +899,20 @@ const style = `
 
   .legend-color {
     width: 24px; height: 24px; flex-shrink: 0;
-    border-radius: 2px; border: 1px solid rgba(245,200,66,.3);
+    border-radius: 2px; border: 1px solid rgba(200,16,46,.3);
   }
 
   .legend-text {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.9rem, 1.5vw, 1rem);
-    color: rgba(245,233,204,.82);
+    color: rgba(43,26,13,.85);
   }
 
-  .legend-text strong { color: var(--gold); }
+  .legend-text strong { color: var(--red); }
 
   .map-phase-info {
-    background: rgba(61,37,16,.5);
-    border: 1px solid rgba(245,200,66,.2);
+    background: rgba(200,16,46,.05);
+    border: 1px solid rgba(200,16,46,.2);
     padding: clamp(16px, 2.5vw, 24px);
     border-radius: 2px;
     margin-top: 16px;
@@ -862,20 +921,20 @@ const style = `
   .map-phase-info h4 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1rem, 1.8vw, 1.3rem);
-    color: var(--gold); margin-bottom: 8px;
+    color: var(--red); margin-bottom: 8px;
   }
 
   .map-phase-info p {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.9rem, 1.5vw, 1rem);
-    color: rgba(245,233,204,.82); line-height: 1.7;
+    color: rgba(43,26,13,.85); line-height: 1.7;
   }
 
   /* ─── COMMANDERS SECTION ─────────────────────────── */
-  .sec-commanders { background: var(--brown-deep); position: relative; }
+  .sec-commanders { background: #faf5eb; position: relative; }
   .sec-commanders::before {
     content:''; position:absolute; inset:0;
-    background: radial-gradient(ellipse at 70% 50%, rgba(200,16,46,.06) 0%, transparent 70%);
+    background: radial-gradient(ellipse at 70% 50%, rgba(200,16,46,.04) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -898,9 +957,9 @@ const style = `
   }
 
   .carousel-btn {
-    background: rgba(200,16,46,.3);
-    border: 2px solid rgba(200,16,46,.6);
-    color: var(--gold);
+    background: rgba(200,16,46,.2);
+    border: 2px solid rgba(200,16,46,.4);
+    color: var(--red);
     padding: 10px 20px;
     cursor: pointer;
     font-family: 'Crimson Text', serif;
@@ -909,7 +968,7 @@ const style = `
     border-radius: 2px;
   }
 
-  .carousel-btn:hover { background: rgba(200,16,46,.6); transform: scale(1.05); }
+  .carousel-btn:hover { background: rgba(200,16,46,.4); transform: scale(1.05); }
   .carousel-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
   .commanders-title-label {
@@ -917,12 +976,13 @@ const style = `
     margin-bottom: 24px;
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.3rem, 2.2vw, 1.8rem);
-    color: var(--gold);
+    color: var(--red);
   }
 
   .commander-card {
-    background: rgba(61,37,16,.5);
-    border: 1px solid rgba(245,200,66,.2);
+    background: #ffffff;
+    border: 1px solid rgba(200,16,46,.15);
+    border-top: 2px solid var(--red);
     border-radius: 2px;
     overflow: hidden;
     transition: all .3s;
@@ -930,9 +990,11 @@ const style = `
   }
 
   .commander-card:hover {
-    background: rgba(61,37,16,.75);
-    border-color: rgba(245,200,66,.4);
+    background: #fffdf5;
+    border-color: rgba(200,16,46,.3);
+    border-top: 2px solid var(--red);
     transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   }
 
   .commander-avatar {
@@ -960,26 +1022,26 @@ const style = `
   .commander-name {
     font-family: 'Playfair Display', serif;
     font-size: clamp(.88rem, 1.4vw, 1rem);
-    font-weight: 700; color: var(--cream);
+    font-weight: 700; color: rgba(43,26,13,.9);
     margin-bottom: 4px;
   }
 
   .commander-rank {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.75rem, 1.2vw, .88rem);
-    color: rgba(245,233,204,.5); font-style: italic;
+    color: rgba(43,26,13,.6); font-style: italic;
     margin-bottom: 4px;
   }
 
   .commander-role {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.8rem, 1.3vw, .92rem);
-    color: rgba(245,233,204,.7);
+    color: var(--red);
   }
 
   /* ─── VIDEO SECTION ──────────────────────────────── */
   .sec-video {
-    background: var(--dark);
+    background: #f5f0e5;
     position: relative;
     overflow: hidden;
   }
@@ -987,15 +1049,15 @@ const style = `
     content: '';
     position: absolute; inset: 0;
     background:
-      radial-gradient(ellipse at 20% 50%, rgba(200,16,46,.07) 0%, transparent 55%),
-      radial-gradient(ellipse at 80% 50%, rgba(245,200,66,.04) 0%, transparent 55%);
+      radial-gradient(ellipse at 20% 50%, rgba(200,16,46,.04) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 50%, rgba(200,16,46,.03) 0%, transparent 55%);
     pointer-events: none;
   }
 
   .video-tabs {
     display: flex; gap: 0; margin-bottom: clamp(24px, 4vw, 48px);
     justify-content: center;
-    border: 1px solid rgba(245,200,66,.2);
+    border: 1px solid rgba(200,16,46,.2);
     border-radius: 3px;
     overflow: hidden;
     max-width: 500px;
@@ -1006,23 +1068,23 @@ const style = `
   .vtab-btn {
     flex: 1;
     padding: 14px 20px;
-    background: transparent;
+    background: #ffffff;
     border: none;
-    color: rgba(245,233,204,.55);
+    color: rgba(43,26,13,.6);
     font-family: 'Crimson Text', serif;
     font-size: clamp(0.85rem, 1.5vw, 1rem);
     letter-spacing: 0.08em;
     cursor: pointer;
     transition: all .3s;
-    border-right: 1px solid rgba(245,200,66,.2);
+    border-right: 1px solid rgba(200,16,46,.2);
     position: relative;
   }
   .vtab-btn:last-child { border-right: none; }
   .vtab-btn.active {
-    background: rgba(200,16,46,.35);
-    color: var(--gold);
+    background: rgba(200,16,46,.3);
+    color: var(--red);
   }
-  .vtab-btn:hover:not(.active) { background: rgba(61,37,16,.5); color: var(--cream); }
+  .vtab-btn:hover:not(.active) { background: rgba(200,16,46,.1); color: var(--red); }
 
   /* VIDEO GRID */
   .video-grid {
@@ -1034,15 +1096,18 @@ const style = `
   }
 
   .video-card {
-    background: rgba(26,14,7,.8);
-    border: 1px solid rgba(245,200,66,.15);
+    background: #ffffff;
+    border: 1px solid rgba(200,16,46,.15);
+    border-top: 2px solid var(--red);
     border-radius: 4px;
     overflow: hidden;
     transition: border-color .3s, transform .3s;
   }
   .video-card:hover {
-    border-color: rgba(245,200,66,.38);
+    border-color: rgba(200,16,46,.3);
+    border-top: 2px solid var(--red);
     transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   }
 
   .video-embed-wrap {
@@ -1066,14 +1131,14 @@ const style = `
   .video-card-title {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1rem, 1.8vw, 1.22rem);
-    font-weight: 700; color: var(--gold);
+    font-weight: 700; color: var(--red);
     margin-bottom: 8px;
   }
 
   .video-card-desc {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.88rem, 1.4vw, 1rem);
-    color: rgba(245,233,204,.7);
+    color: rgba(43,26,13,.8);
     line-height: 1.6;
   }
 
@@ -1085,8 +1150,8 @@ const style = `
 
   .music-hero-banner {
     position: relative;
-    background: linear-gradient(135deg, #1a0e07 0%, #2b1208 50%, #1a0e07 100%);
-    border: 1px solid rgba(245,200,66,.25);
+    background: linear-gradient(135deg, rgba(255,253,245,.9) 0%, rgba(254,248,232,.9) 50%, rgba(255,253,245,.9) 100%);
+    border: 1px solid rgba(200,16,46,.2);
     border-radius: 6px;
     overflow: hidden;
     padding: clamp(28px, 4vw, 48px);
@@ -1105,22 +1170,22 @@ const style = `
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.4rem, 3vw, 2.2rem);
     font-weight: 900;
-    color: var(--gold);
+    color: var(--red);
     margin-bottom: 6px;
   }
 
   .music-song-meta {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.9rem, 1.5vw, 1.05rem);
-    color: rgba(245,233,204,.6);
+    color: rgba(43,26,13,.7);
     font-style: italic;
     margin-bottom: clamp(20px, 3vw, 32px);
   }
 
   /* Custom audio player */
   .audio-player {
-    background: rgba(13,10,6,.6);
-    border: 1px solid rgba(245,200,66,.18);
+    background: rgba(200,16,46,.05);
+    border: 1px solid rgba(200,16,46,.2);
     border-radius: 4px;
     padding: clamp(16px, 2.5vw, 24px);
   }
@@ -1136,25 +1201,25 @@ const style = `
     width: 52px; height: 52px;
     border-radius: 50%;
     background: var(--red);
-    border: 2px solid rgba(245,200,66,.4);
-    color: var(--gold);
+    border: 2px solid rgba(200,16,46,.6);
+    color: #ffffff;
     font-size: 20px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: all .25s;
     flex-shrink: 0;
-    box-shadow: 0 0 20px rgba(200,16,46,.45);
+    box-shadow: 0 0 20px rgba(200,16,46,.3);
   }
   .play-btn:hover {
     background: #e01535;
     transform: scale(1.08);
-    box-shadow: 0 0 30px rgba(200,16,46,.65);
+    box-shadow: 0 0 30px rgba(200,16,46,.5);
   }
 
   .time-display {
     font-family: 'Crimson Text', serif;
     font-size: 13px;
-    color: rgba(245,233,204,.55);
+    color: rgba(43,26,13,.6);
     letter-spacing: .04em;
     white-space: nowrap;
     min-width: 80px;
@@ -1166,13 +1231,13 @@ const style = `
   }
   .vol-icon {
     font-size: 16px;
-    color: rgba(245,233,204,.5);
+    color: rgba(43,26,13,.5);
   }
 
   .progress-wrap {
     position: relative;
     height: 6px;
-    background: rgba(245,200,66,.12);
+    background: rgba(200,16,46,.15);
     border-radius: 3px;
     cursor: pointer;
     overflow: hidden;
@@ -1180,7 +1245,7 @@ const style = `
   }
   .progress-fill {
     height: 100%;
-    background: linear-gradient(to right, var(--red), var(--gold));
+    background: linear-gradient(to right, var(--red), #ff9933);
     border-radius: 3px;
     transition: width .15s linear;
     pointer-events: none;
@@ -1191,21 +1256,21 @@ const style = `
     appearance: none;
     height: 4px;
     border-radius: 2px;
-    background: rgba(245,200,66,.2);
+    background: rgba(200,16,46,.15);
     outline: none;
     cursor: pointer;
   }
   .seek-slider {
     width: 100%;
     height: 6px;
-    background: rgba(245,200,66,.12);
+    background: rgba(200,16,46,.15);
   }
   .seek-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 14px; height: 14px;
     border-radius: 50%;
-    background: var(--gold);
-    box-shadow: 0 0 6px rgba(245,200,66,.6);
+    background: var(--red);
+    box-shadow: 0 0 6px rgba(200,16,46,.5);
     cursor: pointer;
   }
   .volume-slider { width: 80px; }
@@ -1213,22 +1278,22 @@ const style = `
     -webkit-appearance: none;
     width: 12px; height: 12px;
     border-radius: 50%;
-    background: var(--gold);
+    background: var(--red);
     cursor: pointer;
   }
 
   .audio-source-note {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.78rem, 1.2vw, .88rem);
-    color: rgba(245,233,204,.38);
+    color: rgba(43,26,13,.5);
     text-align: center;
     margin-top: 10px;
     font-style: italic;
   }
 
   .lyrics-card {
-    background: rgba(26,14,7,.7);
-    border: 1px solid rgba(245,200,66,.15);
+    background: #ffffff;
+    border: 1px solid rgba(200,16,46,.15);
     border-left: 3px solid var(--red);
     border-radius: 3px;
     padding: clamp(20px, 3vw, 36px);
@@ -1239,7 +1304,7 @@ const style = `
     font-family: 'Playfair Display', serif;
     font-size: clamp(1rem, 1.8vw, 1.3rem);
     font-weight: 700;
-    color: var(--gold);
+    color: var(--red);
     margin-bottom: 16px;
     display: flex; align-items: center; gap: 10px;
   }
@@ -1248,12 +1313,12 @@ const style = `
     font-family: 'Crimson Text', serif;
     font-size: clamp(.92rem, 1.6vw, 1.05rem);
     line-height: 2;
-    color: rgba(245,233,204,.82);
+    color: rgba(43,26,13,.85);
     white-space: pre-line;
   }
 
   .lyrics-body .chorus {
-    color: var(--gold);
+    color: var(--red);
     font-style: italic;
     font-weight: 600;
   }
@@ -1266,8 +1331,8 @@ const style = `
   }
 
   .song-info-card {
-    background: rgba(61,37,16,.35);
-    border: 1px solid rgba(245,200,66,.12);
+    background: rgba(200,16,46,.05);
+    border: 1px solid rgba(200,16,46,.2);
     border-radius: 3px;
     padding: 18px;
     text-align: center;
@@ -1278,7 +1343,7 @@ const style = `
     font-size: clamp(.7rem, 1.1vw, .8rem);
     letter-spacing: .16em;
     text-transform: uppercase;
-    color: rgba(245,233,204,.38);
+    color: rgba(43,26,13,.5);
     margin-bottom: 6px;
   }
 
@@ -1286,7 +1351,7 @@ const style = `
     font-family: 'Playfair Display', serif;
     font-size: clamp(.95rem, 1.6vw, 1.15rem);
     font-weight: 700;
-    color: var(--cream);
+    color: rgba(43,26,13,.9);
   }
 
   .youtube-music-embed {
@@ -1305,7 +1370,7 @@ const style = `
 
   /* ─── MEMORIAL SECTION ───────────────────────────── */
   .sec-memorial {
-    background: #060402;
+    background: linear-gradient(180deg, #c8102e 0%, #a6081f 50%, #c8102e 100%);
     position: relative;
     overflow: hidden;
   }
@@ -1315,9 +1380,9 @@ const style = `
     content: '';
     position: absolute; inset: 0;
     background:
-      radial-gradient(ellipse at 50% 0%, rgba(200,16,46,.06) 0%, transparent 50%),
-      radial-gradient(ellipse at 20% 100%, rgba(245,200,66,.03) 0%, transparent 45%),
-      radial-gradient(ellipse at 80% 100%, rgba(245,200,66,.03) 0%, transparent 45%);
+      radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 20% 100%, rgba(255,255,255,.05) 0%, transparent 45%),
+      radial-gradient(ellipse at 80% 100%, rgba(255,255,255,.05) 0%, transparent 45%);
     pointer-events: none;
   }
 
@@ -1330,21 +1395,21 @@ const style = `
     position: absolute; top: -10px;
     width: 3px; height: 3px;
     border-radius: 50%;
-    background: rgba(245,200,66,.25);
+    background: rgba(255,255,255,.3);
     animation: mpFall linear infinite;
   }
-  .mp:nth-child(1)  { left:5%;  width:2px;height:2px; animation-duration:9s;  animation-delay:0s;   opacity:.18; }
-  .mp:nth-child(2)  { left:13%; width:3px;height:3px; animation-duration:12s; animation-delay:1.5s; opacity:.22; }
-  .mp:nth-child(3)  { left:22%; width:2px;height:2px; animation-duration:8s;  animation-delay:3s;   opacity:.15; }
-  .mp:nth-child(4)  { left:31%; width:4px;height:4px; animation-duration:14s; animation-delay:0.8s; opacity:.12; }
-  .mp:nth-child(5)  { left:42%; width:2px;height:2px; animation-duration:10s; animation-delay:5s;   opacity:.2;  }
-  .mp:nth-child(6)  { left:54%; width:3px;height:3px; animation-duration:11s; animation-delay:2.2s; opacity:.17; }
-  .mp:nth-child(7)  { left:63%; width:2px;height:2px; animation-duration:9s;  animation-delay:6s;   opacity:.14; }
-  .mp:nth-child(8)  { left:72%; width:3px;height:3px; animation-duration:13s; animation-delay:1s;   opacity:.2;  }
-  .mp:nth-child(9)  { left:84%; width:2px;height:2px; animation-duration:10s; animation-delay:4s;   opacity:.16; }
-  .mp:nth-child(10) { left:93%; width:4px;height:4px; animation-duration:15s; animation-delay:7s;   opacity:.1;  }
-  .mp:nth-child(11) { left:8%;  width:2px;height:2px; animation-duration:11s; animation-delay:8s;   opacity:.2;  background:rgba(200,16,46,.3); }
-  .mp:nth-child(12) { left:47%; width:3px;height:3px; animation-duration:9s;  animation-delay:2.8s; opacity:.18; background:rgba(200,16,46,.25); }
+  .mp:nth-child(1)  { left:5%;  width:2px;height:2px; animation-duration:9s;  animation-delay:0s;   opacity:.25; }
+  .mp:nth-child(2)  { left:13%; width:3px;height:3px; animation-duration:12s; animation-delay:1.5s; opacity:.3; }
+  .mp:nth-child(3)  { left:22%; width:2px;height:2px; animation-duration:8s;  animation-delay:3s;   opacity:.2; }
+  .mp:nth-child(4)  { left:31%; width:4px;height:4px; animation-duration:14s; animation-delay:0.8s; opacity:.15; }
+  .mp:nth-child(5)  { left:42%; width:2px;height:2px; animation-duration:10s; animation-delay:5s;   opacity:.27; }
+  .mp:nth-child(6)  { left:54%; width:3px;height:3px; animation-duration:11s; animation-delay:2.2s; opacity:.22; }
+  .mp:nth-child(7)  { left:63%; width:2px;height:2px; animation-duration:9s;  animation-delay:6s;   opacity:.18; }
+  .mp:nth-child(8)  { left:72%; width:3px;height:3px; animation-duration:13s; animation-delay:1s;   opacity:.25; }
+  .mp:nth-child(9)  { left:84%; width:2px;height:2px; animation-duration:10s; animation-delay:4s;   opacity:.2; }
+  .mp:nth-child(10) { left:93%; width:4px;height:4px; animation-duration:15s; animation-delay:7s;   opacity:.12; }
+  .mp:nth-child(11) { left:8%;  width:2px;height:2px; animation-duration:11s; animation-delay:8s;   opacity:.25; background:rgba(255,255,255,.35); }
+  .mp:nth-child(12) { left:47%; width:3px;height:3px; animation-duration:9s;  animation-delay:2.8s; opacity:.22; background:rgba(255,255,255,.3); }
 
   @keyframes mpFall {
     0%   { transform: translateY(0)    translateX(0)   rotate(0deg);   opacity: 0; }
@@ -1361,15 +1426,15 @@ const style = `
   }
   .memorial-divider-line {
     flex: 1; max-width: 180px; height: 1px;
-    background: linear-gradient(to right, transparent, rgba(245,200,66,.35));
+    background: linear-gradient(to right, transparent, rgba(255,255,255,.4));
   }
   .memorial-divider-line.right {
-    background: linear-gradient(to left, transparent, rgba(245,200,66,.35));
+    background: linear-gradient(to left, transparent, rgba(255,255,255,.4));
   }
   .memorial-divider-icon {
     font-size: 22px;
-    color: rgba(245,200,66,.6);
-    text-shadow: 0 0 12px rgba(245,200,66,.4);
+    color: rgba(255,255,255,.7);
+    text-shadow: 0 0 12px rgba(255,255,255,.3);
   }
 
   /* Eternal flame / candle row */
@@ -1424,16 +1489,16 @@ const style = `
     max-width: min(760px, 100%);
     margin: 0 auto clamp(40px, 6vw, 72px);
     padding: clamp(24px, 4vw, 48px);
-    border: 1px solid rgba(245,200,66,.12);
-    border-top: 3px solid rgba(200,16,46,.5);
-    background: rgba(10,6,2,.6);
+    border: 1px solid rgba(255,255,255,.2);
+    border-top: 3px solid rgba(255,255,255,.4);
+    background: rgba(255,255,255,.08);
     position: relative;
   }
   .epitaph-block::before,
   .epitaph-block::after {
     content: '✦';
     position: absolute; top: 16px;
-    color: rgba(245,200,66,.25);
+    color: rgba(255,255,255,.3);
     font-size: 12px;
   }
   .epitaph-block::before { left: 16px; }
@@ -1443,16 +1508,16 @@ const style = `
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.1rem, 2.5vw, 1.65rem);
     font-style: italic; font-weight: 700;
-    color: var(--cream);
+    color: #ffffff;
     line-height: 1.75;
     margin-bottom: 18px;
   }
-  .epitaph-verse em { color: var(--gold); font-style: normal; }
+  .epitaph-verse em { color: #ffe680; font-style: normal; }
 
   .epitaph-attr {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.82rem, 1.3vw, .95rem);
-    color: rgba(245,233,204,.4);
+    color: rgba(255,255,255,.6);
     letter-spacing: .1em;
     text-transform: uppercase;
   }
@@ -1464,7 +1529,7 @@ const style = `
     flex-wrap: wrap;
     gap: 1px;
     margin-bottom: clamp(40px, 6vw, 72px);
-    border: 1px solid rgba(245,200,66,.1);
+    border: 1px solid rgba(255,255,255,.15);
     overflow: hidden;
     border-radius: 3px;
     max-width: min(900px, 100%);
@@ -1475,8 +1540,8 @@ const style = `
     flex: 1 1 160px;
     text-align: center;
     padding: clamp(18px, 2.5vw, 28px) clamp(12px, 2vw, 20px);
-    background: rgba(16,8,3,.7);
-    border-right: 1px solid rgba(245,200,66,.08);
+    background: rgba(255,255,255,.1);
+    border-right: 1px solid rgba(255,255,255,.12);
     position: relative;
   }
   .mem-stat:last-child { border-right: none; }
@@ -1488,15 +1553,15 @@ const style = `
   .mem-stat-n {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.5rem, 3.5vw, 2.4rem);
-    font-weight: 900; color: var(--gold); display: block;
-    text-shadow: 0 0 24px rgba(245,200,66,.35);
+    font-weight: 900; color: #ffffff; display: block;
+    text-shadow: 0 0 24px rgba(255,255,255,.3);
     line-height: 1;
     margin-bottom: 6px;
   }
   .mem-stat-l {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.75rem, 1.2vw, .88rem);
-    color: rgba(245,233,204,.45);
+    color: rgba(255,255,255,.7);
     line-height: 1.4;
     display: block;
   }
@@ -1506,7 +1571,7 @@ const style = `
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.2rem, 2.5vw, 1.8rem);
     font-weight: 700;
-    color: var(--gold);
+    color: #ffffff;
     text-align: center;
     margin-bottom: clamp(24px, 3.5vw, 44px);
     display: flex; align-items: center; justify-content: center; gap: 14px;
@@ -1515,10 +1580,10 @@ const style = `
   .heroes-section-title::after {
     content: '';
     flex: 1; max-width: 100px; height: 1px;
-    background: linear-gradient(to right, transparent, rgba(200,16,46,.5));
+    background: linear-gradient(to right, transparent, rgba(255,255,255,.4));
   }
   .heroes-section-title::after {
-    background: linear-gradient(to left, transparent, rgba(200,16,46,.5));
+    background: linear-gradient(to left, transparent, rgba(255,255,255,.4));
   }
 
   .heroes-grid {
@@ -1529,9 +1594,9 @@ const style = `
   }
 
   .hero-card {
-    background: rgba(14,8,2,.8);
-    border: 1px solid rgba(245,200,66,.1);
-    border-top: 2px solid rgba(200,16,46,.35);
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.2);
+    border-top: 2px solid rgba(255,255,255,.5);
     padding: clamp(18px, 2.5vw, 26px);
     border-radius: 2px;
     transition: border-color .35s, background .35s, transform .35s;
@@ -1541,13 +1606,13 @@ const style = `
   .hero-card::before {
     content: '';
     position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(to right, transparent, rgba(245,200,66,.3), transparent);
+    background: linear-gradient(to right, transparent, rgba(255,255,255,.3), transparent);
     opacity: 0; transition: opacity .35s;
   }
   .hero-card:hover {
-    border-color: rgba(245,200,66,.28);
-    border-top-color: rgba(200,16,46,.7);
-    background: rgba(22,12,3,.9);
+    border-color: rgba(255,255,255,.35);
+    border-top-color: rgba(255,255,255,.6);
+    background: rgba(255,255,255,.18);
     transform: translateY(-3px);
   }
   .hero-card:hover::before { opacity: 1; }
@@ -1556,21 +1621,21 @@ const style = `
     font-size: 20px;
     margin-bottom: 10px;
     display: block;
-    filter: drop-shadow(0 0 6px rgba(245,200,66,.5));
+    filter: drop-shadow(0 0 6px rgba(255,255,255,.4));
   }
 
   .hero-card-name {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1rem, 1.8vw, 1.2rem);
     font-weight: 900;
-    color: var(--cream);
+    color: #ffffff;
     margin-bottom: 4px;
   }
 
   .hero-card-title {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.8rem, 1.3vw, .92rem);
-    color: var(--gold);
+    color: #ffe680;
     font-style: italic;
     margin-bottom: 10px;
     letter-spacing: .03em;
@@ -1580,27 +1645,27 @@ const style = `
     font-family: 'Crimson Text', serif;
     font-size: clamp(.88rem, 1.4vw, 1rem);
     line-height: 1.7;
-    color: rgba(245,233,204,.65);
+    color: rgba(255,255,255,.8);
   }
 
   .hero-card-badge {
     display: inline-block;
     margin-top: 12px;
     padding: 3px 10px;
-    background: rgba(200,16,46,.15);
-    border: 1px solid rgba(200,16,46,.3);
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.3);
     border-radius: 2px;
     font-family: 'Crimson Text', serif;
     font-size: clamp(.7rem, 1.1vw, .8rem);
-    color: rgba(245,233,204,.55);
+    color: rgba(255,255,255,.7);
     letter-spacing: .06em;
   }
 
   /* Unknown soldiers wall */
   .unknown-wall {
-    background: rgba(10,6,2,.7);
-    border: 1px solid rgba(245,200,66,.1);
-    border-left: 3px solid rgba(245,200,66,.3);
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.2);
+    border-left: 3px solid rgba(255,255,255,.3);
     padding: clamp(24px, 3.5vw, 40px);
     border-radius: 2px;
     margin-bottom: clamp(32px, 4.5vw, 56px);
@@ -1611,7 +1676,7 @@ const style = `
   .unknown-wall::before {
     content: '';
     position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 50% 50%, rgba(245,200,66,.03) 0%, transparent 70%);
+    background: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,.05) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -1619,7 +1684,7 @@ const style = `
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.15rem, 2.2vw, 1.55rem);
     font-weight: 700;
-    color: var(--gold);
+    color: #ffe680;
     margin-bottom: 14px;
   }
 
@@ -1627,7 +1692,7 @@ const style = `
     font-family: 'Crimson Text', serif;
     font-size: clamp(.95rem, 1.6vw, 1.1rem);
     line-height: 1.85;
-    color: rgba(245,233,204,.72);
+    color: rgba(255,255,255,.85);
     max-width: min(660px, 100%);
     margin: 0 auto 20px;
   }
@@ -1635,8 +1700,8 @@ const style = `
   /* Rolling name ticker */
   .name-ticker-wrap {
     overflow: hidden;
-    border-top: 1px solid rgba(245,200,66,.1);
-    border-bottom: 1px solid rgba(245,200,66,.1);
+    border-top: 1px solid rgba(255,255,255,.15);
+    border-bottom: 1px solid rgba(255,255,255,.15);
     padding: 12px 0;
     margin: 20px 0 0;
     position: relative;
@@ -1647,8 +1712,8 @@ const style = `
     position: absolute; top: 0; bottom: 0; width: 60px; z-index: 2;
     pointer-events: none;
   }
-  .name-ticker-wrap::before { left: 0; background: linear-gradient(to right, rgba(10,6,2,.9), transparent); }
-  .name-ticker-wrap::after  { right: 0; background: linear-gradient(to left, rgba(10,6,2,.9), transparent); }
+  .name-ticker-wrap::before { left: 0; background: linear-gradient(to right, rgba(200,16,46,.9), transparent); }
+  .name-ticker-wrap::after  { right: 0; background: linear-gradient(to left, rgba(200,16,46,.9), transparent); }
 
   .name-ticker {
     display: flex;
@@ -1665,13 +1730,13 @@ const style = `
   .ticker-name {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.82rem, 1.3vw, .95rem);
-    color: rgba(245,233,204,.55);
+    color: rgba(255,255,255,.75);
     padding: 0 clamp(16px, 2.5vw, 28px);
     letter-spacing: .06em;
     flex-shrink: 0;
   }
   .ticker-sep {
-    color: rgba(200,16,46,.6);
+    color: rgba(255,255,255,.4);
     padding: 0 4px;
     flex-shrink: 0;
   }
@@ -1680,8 +1745,8 @@ const style = `
   .memorial-pledge {
     text-align: center;
     padding: clamp(28px, 4vw, 52px) clamp(16px, 4vw, 48px);
-    background: linear-gradient(135deg, rgba(200,16,46,.06) 0%, rgba(10,6,2,.4) 50%, rgba(245,200,66,.04) 100%);
-    border: 1px solid rgba(245,200,66,.12);
+    background: linear-gradient(135deg, rgba(255,255,255,.1) 0%, rgba(255,255,255,.08) 50%, rgba(255,255,255,.06) 100%);
+    border: 1px solid rgba(255,255,255,.2);
     border-radius: 3px;
     margin-top: clamp(16px, 3vw, 32px);
   }
@@ -1691,17 +1756,17 @@ const style = `
     font-size: clamp(1rem, 2vw, 1.4rem);
     font-style: italic;
     font-weight: 700;
-    color: var(--cream);
+    color: #ffffff;
     line-height: 1.75;
     margin-bottom: 16px;
   }
 
-  .pledge-text em { color: var(--gold); font-style: normal; }
+  .pledge-text em { color: #ffe680; font-style: normal; }
 
   .pledge-sig {
     font-family: 'Crimson Text', serif;
     font-size: clamp(.8rem, 1.3vw, .92rem);
-    color: rgba(245,233,204,.38);
+    color: rgba(255,255,255,.6);
     letter-spacing: .14em;
     text-transform: uppercase;
   }
@@ -1710,35 +1775,35 @@ const style = `
   footer {
     text-align: center;
     padding: clamp(20px, 3vw, 32px) clamp(16px, 4vw, 48px);
-    background: var(--dark);
-    border-top: 1px solid rgba(245,200,66,.1);
+    background: linear-gradient(180deg, #a6081f 0%, #c8102e 100%);
+    border-top: 1px solid rgba(255,255,255,.2);
     font-family: 'Crimson Text', serif;
-    color: rgba(245,233,204,.35);
+    color: rgba(255,255,255,.75);
     font-size: clamp(.78rem, 1.3vw, .9rem);
     letter-spacing: .08em;
     line-height: 1.7;
   }
-  footer strong { color: rgba(245,200,66,.55); }
+  footer strong { color: rgba(255,255,255,.95); }
 
   /* ─── SCROLL TO TOP ──────────────────────────────── */
   .scroll-top {
     position: fixed;
     bottom: 32px; right: 32px;
     width: 44px; height: 44px;
-    background: rgba(200,16,46,.7);
-    border: 1px solid rgba(245,200,66,.4);
+    background: var(--red);
+    border: 1px solid rgba(255,255,255,.3);
     border-radius: 50%;
-    color: var(--gold);
+    color: #ffffff;
     font-size: 18px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     z-index: 100;
     transition: all .3s;
     opacity: 0; pointer-events: none;
-    box-shadow: 0 4px 18px rgba(0,0,0,.5);
+    box-shadow: 0 4px 18px rgba(200,16,46,.4);
   }
   .scroll-top.visible { opacity: 1; pointer-events: auto; }
-  .scroll-top:hover { background: rgba(200,16,46,1); transform: translateY(-3px); }
+  .scroll-top:hover { background: #a6081f; transform: translateY(-3px); }
 `;
 
 // ── SVG Hill ──────────────────────────────────────────────────────────────────
@@ -2354,24 +2419,41 @@ const TIMELINE = [
 
 const GALLERY = [
   {
-    src: "/phụ nữ Sơn La trong chiến dịch.jpg",
-    cap: "Phụ nữ Sơn La đào hào phục vụ chiến dịch",
+    src: "https://cdn.nhandan.vn/images/1ea1ae7a315d88fc6fbf4369608261152458e08b8bc99e62f31d260fb8bc0b9c893d3865c9cf55a9a27ccac6e10792d7f5997befe6ffe0167880ee262f233c05/anh-4-dsc-3069-4790.jpg",
+    cap: "Trường đoạn 1 “Toàn dân ra trận” là hình ảnh những đoàn xe đạp thồ vận chuyển hàng cung cấp cho chiến dịch",
+  },
+  {
+    src: "https://cdn.nhandan.vn/images/1ea1ae7a315d88fc6fbf4369608261152458e08b8bc99e62f31d260fb8bc0b9c7321ef6fef35119be14a1828cc3ba124ee06381a8478d3a245a0896c55cf6436/anh-5-dsc-3088-8152.jpg",
+    cap: "Hình ảnh hàng trăm chiến sĩ kéo pháo vào mặt trận Điện Biên Phủ… được tái hiện hết sức sinh động và chân thật.",
+  },
+
+  {
+    src: "https://cdn.nhandan.vn/images/1ea1ae7a315d88fc6fbf4369608261152458e08b8bc99e62f31d260fb8bc0b9c7aa6edda451154bc6622f6aa7c18e412d89c8c680f7d93e528eb897d9d07b7fe/anh-6-dsc-3073-5817.jpg",
+    cap: "Hình ảnh chiến sĩ nuôi quân trong rừng núi Tây Bắc.",
+  },
+  {
+    src: "https://cdn.nhandan.vn/images/1ea1ae7a315d88fc6fbf4369608261152458e08b8bc99e62f31d260fb8bc0b9c7c3d710408f2bba007f1f45a1385b26fd867914b3858faae1766fb04850a2198/anh-7-dsc-3077-7995.jpg",
+    cap: "Trường đoạn 2 “Khúc dạo đầu hùng tráng”, với điểm nhấn là trận Him Lam mở màn Chiến dịch Điện Biên Phủ. Thắng trận mở màn đã giáng một đòn nặng nề vào tinh thần của quân Pháp đồng thời cổ vũ các chiến sĩ của ta có thêm sức mạnh, củng cố niềm tin vào những trận đánh tiếp theo.",
+  },
+  {
+    src: "https://cdn.nhandan.vn/images/1ea1ae7a315d88fc6fbf4369608261152458e08b8bc99e62f31d260fb8bc0b9c4362333f89f611eade8d67ecceaa8ba050e106233af62bf251a71da2f6fda7bb/anh-8-dsc-3083-617.jpg",
+    cap: "Trường đoạn 2 “Khúc dạo đầu hùng tráng”",
+  },
+  {
+    src: "https://cdn.nhandan.vn/images/1ea1ae7a315d88fc6fbf4369608261152458e08b8bc99e62f31d260fb8bc0b9c9f85ec9258585c7b0c0d5f3d9a214d283026f01d0220ee16eaa3355965f6892e/anh-9-dsc-3082-651.jpg",
+    cap: "Hình ảnh tái hiện một đơn vị cứu thương trên chiến trường Điện Biên Phủ.",
+  },
+  {
+    src: "https://cdn.nhandan.vn/images/1ea1ae7a315d88fc6fbf4369608261152458e08b8bc99e62f31d260fb8bc0b9c756aa8c0ed7b6b9658f9b7c5e63ca24f95cfc8220f9008c9561dea5b7973fa77/anh-10-dsc-3074-2869.jpg",
+    cap: "Trường đoạn 3 “Cuộc đối đầu lịch sử”: Những hình ảnh hầm hào, dây thép gai, trận đánh giáp lá cà… phản ánh sự khốc liệt của chiến trường. Kết thúc trường đoạn bằng hình ảnh cột khói từ quả bộc phá trong lòng đồi A1.",
+  },
+  {
+    src: "https://cdn.nhandan.vn/images/1ea1ae7a315d88fc6fbf4369608261152458e08b8bc99e62f31d260fb8bc0b9c78f45f4ef80f21696453f69e52a7205753c6e06d4864368d0aceff45d28c22f5/anh-11-dsc-3079-4910.jpg",
+    cap: "Trường đoạn 4 “Chiến thắng”: Đối lập với hình ảnh thất bại của quân Pháp là hình ảnh quân ta vùng lên đánh chiếm tập đoàn cứ điểm Điện Biên Phủ và điểm nhấn là lá cờ “Quyết chiến, Quyết thắng” của Quân đội Nhân dân Việt Nam tung bay trên nóc hầm tướng De Castries - Chiến dịch Điện Biên Phủ thắng lợi.",
   },
   {
     src: "/Cờ đỏ sao vàng – biểu tượng chiến thắng.webp",
     cap: "Cờ đỏ sao vàng – biểu tượng chiến thắng",
-  },
-  {
-    src: "/Hành quân chiến dịch.webp",
-    cap: "Hành quân ra trận Điện Biên Phủ",
-  },
-  {
-    src: "/Người chiến sĩ Điện Biên anh hùng.jpg",
-    cap: "Người chiến sĩ Điện Biên anh hùng",
-  },
-  {
-    src: "/Địa hình lòng chảo Mường Thanh bây giờ.jpg",
-    cap: "Địa hình lòng chảo Mường Thanh ngày nay",
   },
 ];
 
@@ -2881,15 +2963,20 @@ export default function Home() {
           <a href="#boicaml">Bối cảnh</a>
           <a href="#chuanbi">Chuẩn bị</a>
           <a href="#a1">Đồi A1</a>
+          <a href="#map">Bản đồ</a>
           <a href="#timeline">Diễn biến</a>
           <a href="#ynghia">Ý nghĩa</a>
           <a href="#baihoc">Bài học</a>
+                    <a href="#commanders">Lãnh đạo</a>
+                    <a href="#gallery">Hình ảnh</a>
+
+           <a href="#media" style={{ color: "#f5c842" }}>
+            📽 Video và Âm nhạc
+          </a>
           <a href="#tuong-niem" style={{ color: "#f0c0c0" }}>
             🕯 Tưởng Niệm
           </a>
-          <a href="#media" style={{ color: "#f5c842" }}>
-            📽 Media
-          </a>
+         
         </div>
       </nav>
 
@@ -2925,51 +3012,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ĐỒI A1 */}
-      <section className="sec sec-a1" id="a1">
-        <div className="sec-inner">
-          <div className="sec-label">Di tích lịch sử</div>
-          <h2 className="sec-title">Đồi A1 – Trận chiến ác liệt nhất</h2>
-          <div className="a1-grid">
-            <div className="a1-img-wrap">
-              <img src="/Đồi A1.jpg" alt="Đồi A1 Điện Biên Phủ" />
-              <div className="a1-img-cap">
-                🏔️ Đồi A1 (Éliane 2) – cứ điểm kiên cố nhất của quân Pháp
-              </div>
-            </div>
-            <div className="a1-info">
-              <h3>Cứ điểm Éliane 2 – Đồi A1</h3>
-              <p>
-                Đồi A1 (Pháp gọi là Éliane 2) là cứ điểm then chốt và kiên cố
-                nhất trong hệ thống phòng thủ của quân Pháp tại Điện Biên Phủ.
-                Nằm ở phía Đông Mường Thanh, đồi A1 khống chế toàn bộ khu trung
-                tâm và sân bay — yết hầu tiếp tế duy nhất của quân Pháp.
-              </p>
-              <p>
-                Trận chiến giành giật đồi A1 kéo dài gần{" "}
-                <strong>2 tháng</strong> với những trận đánh đẫm máu nhất. Đêm
-                6/5/1954, quân ta kích nổ 1.000 kg thuốc nổ trong đường hầm bí
-                mật, phá vỡ hoàn toàn tuyến phòng thủ và mở đường cho đợt tổng
-                công kích lịch sử.
-              </p>
-              <div className="stats">
-                <div className="stat">
-                  <span className="stat-n">56</span>
-                  <span className="stat-l">ngày đêm chiến đấu</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-n">16.200</span>
-                  <span className="stat-l">tù binh Pháp</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-n">7/5</span>
-                  <span className="stat-l">ngày toàn thắng</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* BỐI CẢNH LỊCH SỬ */}
       <section className="sec sec-context" id="boicaml">
@@ -3171,6 +3214,52 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ĐỒI A1 */}
+      <section className="sec sec-a1" id="a1">
+        <div className="sec-inner">
+          <div className="sec-label">Di tích lịch sử</div>
+          <h2 className="sec-title">Đồi A1 – Trận chiến ác liệt nhất</h2>
+          <div className="a1-grid">
+            <div className="a1-img-wrap">
+              <img src="/Đồi A1.jpg" alt="Đồi A1 Điện Biên Phủ" />
+              <div className="a1-img-cap">
+                🏔️ Đồi A1 (Éliane 2) – cứ điểm kiên cố nhất của quân Pháp
+              </div>
+            </div>
+            <div className="a1-info">
+              <h3>Cứ điểm Éliane 2 – Đồi A1</h3>
+              <p>
+                Đồi A1 (Pháp gọi là Éliane 2) là cứ điểm then chốt và kiên cố
+                nhất trong hệ thống phòng thủ của quân Pháp tại Điện Biên Phủ.
+                Nằm ở phía Đông Mường Thanh, đồi A1 khống chế toàn bộ khu trung
+                tâm và sân bay — yết hầu tiếp tế duy nhất của quân Pháp.
+              </p>
+              <p>
+                Trận chiến giành giật đồi A1 kéo dài gần{" "}
+                <strong>2 tháng</strong> với những trận đánh đẫm máu nhất. Đêm
+                6/5/1954, quân ta kích nổ 1.000 kg thuốc nổ trong đường hầm bí
+                mật, phá vỡ hoàn toàn tuyến phòng thủ và mở đường cho đợt tổng
+                công kích lịch sử.
+              </p>
+              <div className="stats">
+                <div className="stat">
+                  <span className="stat-n">56</span>
+                  <span className="stat-l">ngày đêm chiến đấu</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-n">16.200</span>
+                  <span className="stat-l">tù binh Pháp</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-n">7/5</span>
+                  <span className="stat-l">ngày toàn thắng</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* MAP */}
       <section className="sec sec-map" id="map">
         <div className="sec-inner">
@@ -3314,6 +3403,219 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="sec sec-sig" id="ynghia">
+        <div className="sig-inner">
+          <div className="sec-label">Chương IV</div>
+          <h2 className="sec-title">Kết quả &amp; Ý nghĩa lịch sử</h2>
+
+          <p
+            className="sig-body"
+            style={{
+              textAlign: "center",
+              marginBottom: "clamp(28px,4vw,44px)",
+            }}
+          >
+            Chiến thắng Điện Biên Phủ là thắng lợi của ý chí, khát vọng độc lập,
+            tự do dân tộc Việt Nam, nòng cốt là Quân đội nhân dân anh hùng.
+            Chiến thắng ngày 7/5/1954 đập tan tập đoàn cứ điểm mạnh nhất của
+            thực dân Pháp, tiêu diệt và bắt sống{" "}
+            <strong style={{ color: "var(--gold)" }}>16.200</strong> quân địch —
+            trong đó có tướng De Castries và toàn bộ bộ tham mưu. Đây là{" "}
+            <em>&ldquo;thiên sử vàng của dân tộc Việt Nam&rdquo;</em>, chiến
+            công vĩ đại thế kỷ XX.
+          </p>
+
+          <div className="sig-quotes-grid">
+            <div className="quote-block">
+              <p>
+                &ldquo;Điện Biên Phủ thất thủ gây nỗi kinh hoàng khủng khiếp. Đó
+                là một trong những thảm bại lớn nhất của phương Tây...&rdquo;
+              </p>
+              <div className="quote-attr">
+                — Jules Roy,{" "}
+                <em>Trận Điện Biên Phủ dưới con mắt của người Pháp</em>, Nxb.
+                TP. Hồ Chí Minh, 1994, tr.579
+              </div>
+            </div>
+            <div className="quote-block">
+              <p>
+                &ldquo;...đi vào lịch sử thế giới như một chiến công hiển hách,
+                báo hiệu sự thắng lợi của nhân dân các dân tộc bị áp bức, sự sụp
+                đổ của chủ nghĩa thực dân.&rdquo;
+              </p>
+              <div className="quote-attr">
+                — Lê Duẩn,{" "}
+                <em>
+                  Dưới lá cờ vẻ vang của Đảng, vì độc lập, tự do, vì CNXH, tiến
+                  lên giành những thắng lợi mới
+                </em>
+                , tr.90
+              </div>
+            </div>
+          </div>
+
+          {/* Thắng lợi toàn Đông Dương */}
+          <div
+            className="context-block"
+            style={{
+              borderLeftColor: "var(--gold)",
+              maxWidth: "min(920px,100%)",
+              margin: "0 auto clamp(28px,4vw,44px)",
+            }}
+          >
+            <h3>Thắng lợi trên toàn Đông Dương</h3>
+            <p>
+              Cùng thắng lợi Điện Biên Phủ, trên toàn Đông Dương, quân dân ta
+              giành thắng lợi lớn trên{" "}
+              <strong>kinh tế, chính trị, quân sự</strong> tại đồng bằng, trung
+              du Bắc Bộ, Bình Trị Thiên, Nam Trung Bộ, Nam Bộ — góp phần cổ vũ
+              mạnh mẽ mặt trận Điện Biên Phủ. Chiến thắng kết hợp sức mạnh quân
+              sự với đấu tranh ngoại giao, đưa đến{" "}
+              <strong>Hội nghị Giơnevơ</strong>.
+            </p>
+          </div>
+
+          {/* HỘI NGHỊ GIƠNEVƠ
+          <div className="geneva-info">
+            <h3>🕊️ Hội nghị Giơnevơ (8/5/1954)</h3>
+            <p
+              className="sig-body"
+              style={{
+                textAlign: "center",
+                marginBottom: "clamp(16px,2vw,24px)",
+              }}
+            >
+              Từ cuối 1953, Chủ tịch Hồ Chí Minh tuyên bố lập trường:{" "}
+              <em>
+                &ldquo;Cơ sở của việc đình chiến ở Việt Nam là Chính phủ Pháp
+                thật thà tôn trọng nền độc lập thật sự của nước Việt Nam&rdquo;
+              </em>
+              , phải đình chỉ chiến tranh, thương lượng trực tiếp với Chính phủ
+              Việt Nam Dân chủ Cộng hòa.
+            </p>
+
+            <div className="geneva-stats">
+              <div className="geneva-stat">
+                <span className="gs-n">75</span>
+                <span className="gs-l">Ngày đàm phán</span>
+              </div>
+              <div className="geneva-stat">
+                <span className="gs-n">8</span>
+                <span className="gs-l">Phiên họp toàn thể</span>
+              </div>
+              <div className="geneva-stat">
+                <span className="gs-n">23</span>
+                <span className="gs-l">Phiên cấp trưởng đoàn</span>
+              </div>
+              <div className="geneva-stat">
+                <span className="gs-n">21/7</span>
+                <span className="gs-l">Ngày ký Hiệp định</span>
+              </div>
+            </div>
+
+            <div className="geneva-grid">
+              <div className="geneva-card">
+                <span className="gc-flag">🇺🇸</span>
+                <div className="gc-name">John Foster Dulles</div>
+                <div className="gc-role">Trưởng đoàn Mỹ</div>
+              </div>
+              <div className="geneva-card">
+                <span className="gc-flag">🇬🇧</span>
+                <div className="gc-name">Anthony Eden</div>
+                <div className="gc-role">Trưởng đoàn Anh</div>
+              </div>
+              <div className="geneva-card">
+                <span className="gc-flag">🇫🇷</span>
+                <div className="gc-name">Georges Bidault</div>
+                <div className="gc-role">Trưởng đoàn Pháp</div>
+              </div>
+              <div className="geneva-card">
+                <span className="gc-flag">🇻🇳</span>
+                <div className="gc-name">Phạm Văn Đồng</div>
+                <div className="gc-role">Trưởng đoàn Việt Nam DCCH</div>
+              </div>
+            </div>
+
+            <div
+              className="context-block"
+              style={{ borderLeftColor: "var(--gold)" }}
+            >
+              <h3>Nội dung Hiệp định Giơnevơ (21/7/1954)</h3>
+              <p>
+                Ngày <strong>21/7/1954</strong>, Hiệp định Giơnevơ được ký kết,{" "}
+                <strong>
+                  chấm dứt chiến tranh, lập lại hòa bình Đông Dương
+                </strong>
+                . Các nước cam kết tôn trọng{" "}
+                <strong>
+                  độc lập, chủ quyền, thống nhất, toàn vẹn lãnh thổ
+                </strong>{" "}
+                của Việt Nam, Lào, Campuchia.
+              </p>
+            </div>
+          </div> */}
+        </div>
+      </section>
+
+       {/* BÀI HỌC KINH NGHIỆM */}
+      <section className="sec sec-lessons" id="baihoc">
+        <div className="sec-inner">
+          <div className="sec-label">Chương V</div>
+          <h2 className="sec-title">Bài học kinh nghiệm</h2>
+          <div className="context-narrative">
+            <p
+              className="sig-body"
+              style={{
+                textAlign: "center",
+                marginBottom: "clamp(24px,3vw,40px)",
+              }}
+            >
+              Từ Chiến thắng Điện Biên Phủ, Đảng tổng kết những kinh nghiệm quý
+              báu cho sự nghiệp xây dựng và bảo vệ Tổ quốc, góp phần vào khoa
+              học lịch sử Đảng.
+            </p>
+          </div>
+          <div className="lessons-grid">
+            <div className="lesson-card">
+              <span className="lc-num">01</span>
+              <h4>Sức mạnh đại đoàn kết dân tộc</h4>
+              <p>
+                Phát huy sức mạnh đại đoàn kết toàn dân tộc, kết hợp chặt chẽ
+                lực lượng vũ trang với nhân dân, tạo nên thế trận toàn dân đánh
+                giặc — yếu tố then chốt dẫn đến chiến thắng.
+              </p>
+            </div>
+            <div className="lesson-card">
+              <span className="lc-num">02</span>
+              <h4>Chiến tranh nhân dân sáng tạo</h4>
+              <p>
+                Sáng tạo phương pháp chiến tranh nhân dân Việt Nam — kết hợp du
+                kích với chính quy, đánh nhỏ thắng lớn, lấy ít địch nhiều, linh
+                hoạt thay đổi phương châm tác chiến phù hợp thực tiễn.
+              </p>
+            </div>
+            <div className="lesson-card">
+              <span className="lc-num">03</span>
+              <h4>Kiên định đường lối dân tộc</h4>
+              <p>
+                Kiên định đường lối độc lập dân tộc gắn với chủ nghĩa xã hội,
+                kết hợp đấu tranh quân sự với đấu tranh ngoại giao, động viên
+                toàn dân toàn quân, phát huy chủ nghĩa quốc tế trong sáng.
+              </p>
+            </div>
+            <div className="lesson-card">
+              <span className="lc-num">04</span>
+              <h4>Vận dụng sáng tạo lý luận</h4>
+              <p>
+                Vận dụng sáng tạo chủ nghĩa Mác-Lênin, tư tưởng Hồ Chí Minh vào
+                thực tiễn cách mạng Việt Nam. Vai trò lãnh đạo của Đảng Cộng sản
+                Việt Nam là nhân tố quyết định mọi thắng lợi.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* COMMANDERS */}
       <section className="sec sec-commanders" id="commanders">
         <div className="sec-inner">
@@ -3382,6 +3684,7 @@ export default function Home() {
         <div className="sec-inner">
           <div className="sec-label">Tư liệu lịch sử</div>
           <h2 className="sec-title">Hình ảnh chiến dịch</h2>
+          
           <div className="gallery">
             {GALLERY.map((item, i) => (
               <div className={`g-item g${i}`} key={i}>
@@ -3391,6 +3694,8 @@ export default function Home() {
               </div>
             ))}
           </div>
+        
+
         </div>
       </section>
 
@@ -3653,7 +3958,7 @@ export default function Home() {
             </div>
             <div className="mem-stat">
               <span className="mem-stat-icon">🕯️</span>
-              <span className="mem-stat-n">11</span>
+              <span className="mem-stat-n">8</span>
               <span className="mem-stat-l">
                 Nghĩa trang liệt sĩ
                 <br />
@@ -3717,219 +4022,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* KẾT QUẢ & Ý NGHĨA */}
-      <section className="sec sec-sig" id="ynghia">
-        <div className="sig-inner">
-          <div className="sec-label">Chương IV</div>
-          <h2 className="sec-title">Kết quả &amp; Ý nghĩa lịch sử</h2>
+     
 
-          <p
-            className="sig-body"
-            style={{
-              textAlign: "center",
-              marginBottom: "clamp(28px,4vw,44px)",
-            }}
-          >
-            Chiến thắng Điện Biên Phủ là thắng lợi của ý chí, khát vọng độc lập,
-            tự do dân tộc Việt Nam, nòng cốt là Quân đội nhân dân anh hùng.
-            Chiến thắng ngày 7/5/1954 đập tan tập đoàn cứ điểm mạnh nhất của
-            thực dân Pháp, tiêu diệt và bắt sống{" "}
-            <strong style={{ color: "var(--gold)" }}>16.200</strong> quân địch —
-            trong đó có tướng De Castries và toàn bộ bộ tham mưu. Đây là{" "}
-            <em>&ldquo;thiên sử vàng của dân tộc Việt Nam&rdquo;</em>, chiến
-            công vĩ đại thế kỷ XX.
-          </p>
-
-          <div className="sig-quotes-grid">
-            <div className="quote-block">
-              <p>
-                &ldquo;Điện Biên Phủ thất thủ gây nỗi kinh hoàng khủng khiếp. Đó
-                là một trong những thảm bại lớn nhất của phương Tây...&rdquo;
-              </p>
-              <div className="quote-attr">
-                — Jules Roy,{" "}
-                <em>Trận Điện Biên Phủ dưới con mắt của người Pháp</em>, Nxb.
-                TP. Hồ Chí Minh, 1994, tr.579
-              </div>
-            </div>
-            <div className="quote-block">
-              <p>
-                &ldquo;...đi vào lịch sử thế giới như một chiến công hiển hách,
-                báo hiệu sự thắng lợi của nhân dân các dân tộc bị áp bức, sự sụp
-                đổ của chủ nghĩa thực dân.&rdquo;
-              </p>
-              <div className="quote-attr">
-                — Lê Duẩn,{" "}
-                <em>
-                  Dưới lá cờ vẻ vang của Đảng, vì độc lập, tự do, vì CNXH, tiến
-                  lên giành những thắng lợi mới
-                </em>
-                , tr.90
-              </div>
-            </div>
-          </div>
-
-          {/* Thắng lợi toàn Đông Dương */}
-          <div
-            className="context-block"
-            style={{
-              borderLeftColor: "var(--gold)",
-              maxWidth: "min(920px,100%)",
-              margin: "0 auto clamp(28px,4vw,44px)",
-            }}
-          >
-            <h3>Thắng lợi trên toàn Đông Dương</h3>
-            <p>
-              Cùng thắng lợi Điện Biên Phủ, trên toàn Đông Dương, quân dân ta
-              giành thắng lợi lớn trên{" "}
-              <strong>kinh tế, chính trị, quân sự</strong> tại đồng bằng, trung
-              du Bắc Bộ, Bình Trị Thiên, Nam Trung Bộ, Nam Bộ — góp phần cổ vũ
-              mạnh mẽ mặt trận Điện Biên Phủ. Chiến thắng kết hợp sức mạnh quân
-              sự với đấu tranh ngoại giao, đưa đến{" "}
-              <strong>Hội nghị Giơnevơ</strong>.
-            </p>
-          </div>
-
-          {/* HỘI NGHỊ GIƠNEVƠ */}
-          <div className="geneva-info">
-            <h3>🕊️ Hội nghị Giơnevơ (8/5/1954)</h3>
-            <p
-              className="sig-body"
-              style={{
-                textAlign: "center",
-                marginBottom: "clamp(16px,2vw,24px)",
-              }}
-            >
-              Từ cuối 1953, Chủ tịch Hồ Chí Minh tuyên bố lập trường:{" "}
-              <em>
-                &ldquo;Cơ sở của việc đình chiến ở Việt Nam là Chính phủ Pháp
-                thật thà tôn trọng nền độc lập thật sự của nước Việt Nam&rdquo;
-              </em>
-              , phải đình chỉ chiến tranh, thương lượng trực tiếp với Chính phủ
-              Việt Nam Dân chủ Cộng hòa.
-            </p>
-
-            <div className="geneva-stats">
-              <div className="geneva-stat">
-                <span className="gs-n">75</span>
-                <span className="gs-l">Ngày đàm phán</span>
-              </div>
-              <div className="geneva-stat">
-                <span className="gs-n">8</span>
-                <span className="gs-l">Phiên họp toàn thể</span>
-              </div>
-              <div className="geneva-stat">
-                <span className="gs-n">23</span>
-                <span className="gs-l">Phiên cấp trưởng đoàn</span>
-              </div>
-              <div className="geneva-stat">
-                <span className="gs-n">21/7</span>
-                <span className="gs-l">Ngày ký Hiệp định</span>
-              </div>
-            </div>
-
-            <div className="geneva-grid">
-              <div className="geneva-card">
-                <span className="gc-flag">🇺🇸</span>
-                <div className="gc-name">John Foster Dulles</div>
-                <div className="gc-role">Trưởng đoàn Mỹ</div>
-              </div>
-              <div className="geneva-card">
-                <span className="gc-flag">🇬🇧</span>
-                <div className="gc-name">Anthony Eden</div>
-                <div className="gc-role">Trưởng đoàn Anh</div>
-              </div>
-              <div className="geneva-card">
-                <span className="gc-flag">🇫🇷</span>
-                <div className="gc-name">Georges Bidault</div>
-                <div className="gc-role">Trưởng đoàn Pháp</div>
-              </div>
-              <div className="geneva-card">
-                <span className="gc-flag">🇻🇳</span>
-                <div className="gc-name">Phạm Văn Đồng</div>
-                <div className="gc-role">Trưởng đoàn Việt Nam DCCH</div>
-              </div>
-            </div>
-
-            <div
-              className="context-block"
-              style={{ borderLeftColor: "var(--gold)" }}
-            >
-              <h3>Nội dung Hiệp định Giơnevơ (21/7/1954)</h3>
-              <p>
-                Ngày <strong>21/7/1954</strong>, Hiệp định Giơnevơ được ký kết,{" "}
-                <strong>
-                  chấm dứt chiến tranh, lập lại hòa bình Đông Dương
-                </strong>
-                . Các nước cam kết tôn trọng{" "}
-                <strong>
-                  độc lập, chủ quyền, thống nhất, toàn vẹn lãnh thổ
-                </strong>{" "}
-                của Việt Nam, Lào, Campuchia.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* BÀI HỌC KINH NGHIỆM */}
-      <section className="sec sec-lessons" id="baihoc">
-        <div className="sec-inner">
-          <div className="sec-label">Chương V</div>
-          <h2 className="sec-title">Bài học kinh nghiệm</h2>
-          <div className="context-narrative">
-            <p
-              className="sig-body"
-              style={{
-                textAlign: "center",
-                marginBottom: "clamp(24px,3vw,40px)",
-              }}
-            >
-              Từ Chiến thắng Điện Biên Phủ, Đảng tổng kết những kinh nghiệm quý
-              báu cho sự nghiệp xây dựng và bảo vệ Tổ quốc, góp phần vào khoa
-              học lịch sử Đảng.
-            </p>
-          </div>
-          <div className="lessons-grid">
-            <div className="lesson-card">
-              <span className="lc-num">01</span>
-              <h4>Sức mạnh đại đoàn kết dân tộc</h4>
-              <p>
-                Phát huy sức mạnh đại đoàn kết toàn dân tộc, kết hợp chặt chẽ
-                lực lượng vũ trang với nhân dân, tạo nên thế trận toàn dân đánh
-                giặc — yếu tố then chốt dẫn đến chiến thắng.
-              </p>
-            </div>
-            <div className="lesson-card">
-              <span className="lc-num">02</span>
-              <h4>Chiến tranh nhân dân sáng tạo</h4>
-              <p>
-                Sáng tạo phương pháp chiến tranh nhân dân Việt Nam — kết hợp du
-                kích với chính quy, đánh nhỏ thắng lớn, lấy ít địch nhiều, linh
-                hoạt thay đổi phương châm tác chiến phù hợp thực tiễn.
-              </p>
-            </div>
-            <div className="lesson-card">
-              <span className="lc-num">03</span>
-              <h4>Kiên định đường lối dân tộc</h4>
-              <p>
-                Kiên định đường lối độc lập dân tộc gắn với chủ nghĩa xã hội,
-                kết hợp đấu tranh quân sự với đấu tranh ngoại giao, động viên
-                toàn dân toàn quân, phát huy chủ nghĩa quốc tế trong sáng.
-              </p>
-            </div>
-            <div className="lesson-card">
-              <span className="lc-num">04</span>
-              <h4>Vận dụng sáng tạo lý luận</h4>
-              <p>
-                Vận dụng sáng tạo chủ nghĩa Mác-Lênin, tư tưởng Hồ Chí Minh vào
-                thực tiễn cách mạng Việt Nam. Vai trò lãnh đạo của Đảng Cộng sản
-                Việt Nam là nhân tố quyết định mọi thắng lợi.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+     
 
       {/* FOOTER */}
       <footer>
