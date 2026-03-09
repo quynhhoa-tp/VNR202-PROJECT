@@ -3791,7 +3791,7 @@ export default function Home() {
               <div className="quote-attr">
                 — Jules Roy,{" "}
                 <em>Trận Điện Biên Phủ dưới con mắt của người Pháp</em>, Nxb.
-                TP. Hồ Chí Minh, 1994, tr.579
+                TP. Hồ Chí Minh, 1994
               </div>
             </div>
             <div className="quote-block">
@@ -3806,7 +3806,7 @@ export default function Home() {
                   Dưới lá cờ vẻ vang của Đảng, vì độc lập, tự do, vì CNXH, tiến
                   lên giành những thắng lợi mới
                 </em>
-                , tr.90
+              
               </div>
             </div>
           </div>
