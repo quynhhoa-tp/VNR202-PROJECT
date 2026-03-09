@@ -567,6 +567,17 @@ const style = `
     .g-cap { font-size: clamp(.65rem, 1vw, .8rem); padding: clamp(6px, 1vw, 12px) clamp(8px, 1.2vw, 14px); }
   }
 
+  .gallery-source {
+    text-align: center;
+    margin-top: clamp(16px, 2.5vw, 28px);
+    padding: clamp(12px, 2vw, 20px);
+    font-family: 'Crimson Text', serif;
+    font-size: clamp(0.8rem, 1.3vw, 0.95rem);
+    color: rgba(43,26,13,.7);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
   /* ─── TIMELINE ───────────────────────────────────── */
   .sec-timeline { background: #faf5eb; }
 
@@ -4059,7 +4070,10 @@ export default function Home() {
               →
             </button>
           </div>
-        
+          
+          <div className="gallery-source">
+            <strong>Nguồn hình ảnh:</strong> Báo Điện tử Nhân Dân. Bức tranh Panorama tái hiện toàn cảnh Chiến dịch Điện Biên Phủ là điểm nhấn ấn tượng tại Bảo tàng Chiến thắng lịch sử Điện Biên Phủ, thành phố Điện Biên Phủ, tỉnh Điện Biên.
+          </div>
 
         </div>
       </section>
