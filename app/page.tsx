@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 
@@ -4197,7 +4197,7 @@ export default function Home() {
               <div className="theory-card" style={{ marginTop: "16px" }}>
                 <h4>Bối cảnh ra đời</h4>
                 <p>
-                  Bài hát "Hò Kéo Pháo" của nhạc sĩ Hoàng Vân được sáng tác năm
+                  Bài hát &ldquo;Hò Kéo Pháo&rdquo; của nhạc sĩ Hoàng Vân được sáng tác năm
                   1954, lấy cảm hứng trực tiếp từ cảnh tượng hàng nghìn chiến sĩ
                   và dân công kéo pháo hạng nặng lên các sườn núi cao bao quanh
                   lòng chảo Điện Biên. Đây là một trong những kỳ tích kỹ thuật
@@ -4297,9 +4297,9 @@ export default function Home() {
           {/* Central epitaph */}
           <div className="epitaph-block">
             <div className="epitaph-verse">
-              "Các anh không chết, các anh đã hóa thành{" "}
+              &ldquo;Các anh không chết, các anh đã hóa thành{" "}
               <em>núi sông, đất trời</em> của Tổ quốc Việt Nam mãi mãi trường
-              tồn."
+              tồn.&rdquo;
             </div>
             <div className="epitaph-attr">
               — Lời tưởng niệm các Anh hùng Liệt sĩ Điện Biên Phủ —
@@ -4387,12 +4387,12 @@ export default function Home() {
           {/* Pledge */}
           <div className="memorial-pledge">
             <div className="pledge-text">
-              "Các anh đã ngã xuống vì <em>độc lập, tự do</em> của Tổ quốc.
+              &ldquo;Các anh đã ngã xuống vì <em>độc lập, tự do</em> của Tổ quốc.
               <br />
               Chúng tôi nguyện ghi nhớ công ơn, tiếp bước con đường các anh đã
               chọn —<br />
               xây dựng đất nước Việt Nam{" "}
-              <em>mãi mãi trường tồn và phồn vinh</em>."
+              <em>mãi mãi trường tồn và phồn vinh</em>.&rdquo;
             </div>
             <div className="pledge-sig">
               Thế hệ hậu bối kính cẩn nghiêng mình
@@ -4455,7 +4455,7 @@ export default function Home() {
       <footer>
         <strong>Chiến dịch Điện Biên Phủ 1954</strong> 
          &nbsp;•&nbsp;{" "}
-        <em>"Lừng lẫy năm châu, chấn động địa cầu"</em>
+        <em>&ldquo;Lừng lẫy năm châu, chấn động địa cầu&rdquo;</em>
         <br />
 
         <strong>Nhóm thực hiện:</strong> Trương Phạm Quỳnh Hoa (SE171754) &nbsp;•&nbsp; Trần Khánh Linh (SE180151) &nbsp;•&nbsp; Huỳnh Huy Hoàng (SE182051) &nbsp;•&nbsp; Đỗ Quốc Anh (	SE180161) &nbsp;•&nbsp; Vũ Hoàng Minh (SE182677) &nbsp;•&nbsp; 	Đỗ	Hoàng Bảo	Trân (SE182181)
@@ -4472,3 +4472,5 @@ export default function Home() {
     </>
   );
 }
+
+
